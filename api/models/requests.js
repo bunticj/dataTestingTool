@@ -7,8 +7,11 @@ const reqSchema = new mongoose.Schema({
     pathname : {type : String, required : true},
     query : {},
     method : {type : String , required : true},
-    body : {},
+    title : {type : String, required : true},
+    description : {type : String,required :true},
+    label : {type : String},
     requestHeaders :  {},
+    body : {},
     requestCreatedAt : {type : Date,required : true}
 });
 

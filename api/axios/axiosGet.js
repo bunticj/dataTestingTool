@@ -7,9 +7,9 @@ const ResponseDoc = require('../models/responses');
 
 
 
-module.exports.getAxios = (reqUrl,reqHeaders,res) => {
+module.exports.getAxios = (reqUrl,reqHeaders,reqTitle,reqDescription,reqLabel,res) => {
     
-
+//handle axios get request
 axios.get(reqUrl, {
     headers: reqHeaders
 })
@@ -23,6 +23,7 @@ axios.get(reqUrl, {
             let splittedQuery = reqQueryString.split('&');
             splittedQuery.forEach(element => {
                 let splittedElem = element.split('=');
+                console.log(splittedElem,'splitted in array ')
                 reqQueryObj[splittedElem[0]] = splittedElem[1];
             });
         } else {
@@ -41,9 +42,13 @@ axios.get(reqUrl, {
         method: response.config.method,
         requestHeaders: response.config.headers,
         requestCreatedAt : new Date().toISOString(),
+        title : reqTitle,
+        description : reqDescription,
+        label : reqLabel
     });
     requestDoc.save((err, req) => {
         if (err) {
+            
             throw err;
         }
         console.log(req);

@@ -23,7 +23,7 @@ app.use(cors());
 
 app.use('/users', userRoutes);
 app.use('/requests',reqRoutes);
-
+/*
 app.use((req,res,next) => {
     const error = new Error('Not found');
     error.status = 404;
@@ -38,5 +38,5 @@ app.use((error,req,res,next) => {
         }
     })
 })
-
+*/
 module.exports = app;

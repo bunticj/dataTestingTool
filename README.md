@@ -1,2 +1,2 @@
 # dataTestingTool
-QA Tool for sending http requests and saving them and responses i database
+QA Tool for http requests
