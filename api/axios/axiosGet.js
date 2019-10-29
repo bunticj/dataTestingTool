@@ -58,7 +58,7 @@ axios.get(reqUrl, {
     //save response in db
     const responseDoc = new ResponseDoc({
        _id : new mongoose.Types.ObjectId(),
-       responseDate : response.data,
+       responseData : response.data,
        responseText : response.statusText,
        responseStatus : response.status,
        responseHeaders : response.headers,

@@ -1,30 +1,32 @@
-const { check , validationResult } = require('express-validator');
+const { body , validationResult } = require('express-validator');
 
-module.exports.checkPostReq =() => {
-[
-    check('url')
+module.exports.reqValidationRules =  () => {
+   return [
+    body('url')
     .not().isEmpty().withMessage('Field is empty'),
 
-    check('method')
+    body('method')
     .not().isEmpty().withMessage('Field is empty'),
 
-    check('title')
+    body('title')
     .not().isEmpty().withMessage('Field is empty'),
 
-    check('description')
+    body('description')
     .not().isEmpty().withMessage('Field is empty')
 
 ]
 }
-module.exports.validationResult = (req) =>{
-    const errors = validationResult(req);
-    if (!errors.isEmpty()){
-        console.log(errors);
 
+
+module.exports.validate= (req,res,next) =>{
+    const errors = validationResult(req);
+    if (errors.isEmpty()){
+        return next()
+    }
         return res.status(400).json({
             errors : errors.array()
         });
     }
-}
+
 
   

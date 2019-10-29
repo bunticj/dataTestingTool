@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const RequestController = require('../controllers/requests');
+const {reqValidationRules,validate} = require('../middlewares/validator');
 
-//post request , calling method from controller
-router.post('/',RequestController.postRequest);
+
+router.post('/',reqValidationRules(),validate,RequestController.postRequest);
 
 module.exports = router;
