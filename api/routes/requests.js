@@ -8,4 +8,6 @@ router.post('/', reqValidationRules(), validate, RequestController.postRequest);
 
 router.get('/', RequestController.getRequest);
 
+router.get('/:requestId',RequestController.getSingleRequest);
+
 module.exports = router;

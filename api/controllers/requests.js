@@ -49,3 +49,35 @@ module.exports.getRequest = (req, res, next) => {
             });
         });
 };
+
+//get single request
+module.exports.getSingleRequest = (req, res, next) => {
+    const id = req.params.requestId;
+    RequestDoc.findById(id)
+        .exec()
+        .then(result => {
+            if (result) {
+                console.log(result);
+                res.status(200).json({
+                    request: result,
+                    allRequests: {
+                        type: 'GET',
+                        url: 'http://localhost:4000/requests/'
+
+                    }
+                })
+            } else {
+                res.status(404).json({
+                    message: 'Request not found'
+                });
+            }
+
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        });
+
+};
