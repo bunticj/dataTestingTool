@@ -2,7 +2,7 @@ const User = require('../models/users');
 const mongoose = require('mongoose');
 
 
-exports.getAllUsers = (req, res, next) => {
+module.exports.getAllUsers = (req, res, next) => {
     User.find()
         .exec()
         .then(result => {
@@ -28,7 +28,7 @@ exports.getAllUsers = (req, res, next) => {
         });
 };
 
-exports.getUserById = (req, res, next) => {
+module.exports.getUserById = (req, res, next) => {
     const id = req.params.userId;
     User.findById(id)
         .exec()
@@ -56,7 +56,7 @@ exports.getUserById = (req, res, next) => {
             });
         });;
 };
-exports.addUser = (req, res, next) => {
+module.exports.addUser = (req, res, next) => {
     const user = new User({
         _id: new mongoose.Types.ObjectId(),
         email: req.body.email,
@@ -91,7 +91,7 @@ exports.addUser = (req, res, next) => {
         });
 };
 
-exports.deleteUser = (req, res, next) => {
+module.exports.deleteUser = (req, res, next) => {
     const id = req.params.userId;
     User.remove({
             _id: id
@@ -110,7 +110,7 @@ exports.deleteUser = (req, res, next) => {
         });
 };
 //In postman ,use array of objects with propName:key,propValue:value 
-exports.updateUser = (req, res, next) => {
+module.exports.updateUser = (req, res, next) => {
     const id = req.params.userId;
     const updateOps = {};
     for (const ops of req.body) {

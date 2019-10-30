@@ -9,7 +9,7 @@ const ResponseDoc = require('../models/responses');
 
 module.exports.getAxios = (reqUrl,reqHeaders,reqTitle,reqDescription,reqLabel,res) => {
     
-//handle axios get request
+
 axios.get(reqUrl, {
     headers: reqHeaders
 })
@@ -45,6 +45,7 @@ axios.get(reqUrl, {
         title : reqTitle,
         description : reqDescription,
         label : reqLabel
+        //responseId : responseDoc._id
     });
     requestDoc.save((err, req) => {
         if (err) {

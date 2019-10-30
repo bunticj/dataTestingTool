@@ -6,14 +6,7 @@ module.exports.reqValidationRules =  () => {
     .not().isEmpty().withMessage('Field is empty'),
 
     body('method')
-    .not().isEmpty().withMessage('Field is empty'),
-
-    body('title')
-    .not().isEmpty().withMessage('Field is empty'),
-
-    body('description')
-    .not().isEmpty().withMessage('Field is empty')
-
+    .not().isEmpty().withMessage('Field is empty')   
 ]
 }
 
@@ -23,7 +16,8 @@ module.exports.validate= (req,res,next) =>{
     if (errors.isEmpty()){
         return next()
     }
-        return res.status(400).json({
+    console.log(errors);
+    return res.status(400).json({
             errors : errors.array()
         });
     }
