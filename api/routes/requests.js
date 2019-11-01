@@ -2,12 +2,13 @@ const express = require('express');
 const router = express.Router();
 const RequestController = require('../controllers/requests');
 const {reqValidationRules,validate} = require('../middlewares/validator');
+const authCheck = require('../middlewares/auth');
 
 
-router.post('/', reqValidationRules(), validate, RequestController.postRequest);
+router.post('/',authCheck, reqValidationRules(), validate, RequestController.postRequest);
 
-router.get('/', RequestController.getRequest);
+router.get('/',authCheck, RequestController.getRequest);
 
-router.get('/:requestId',RequestController.getSingleRequest);
+router.get('/:requestId',authCheck,RequestController.getSingleRequest);
 
 module.exports = router;

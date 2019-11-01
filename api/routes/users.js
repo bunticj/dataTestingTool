@@ -7,13 +7,13 @@ const UserController = require('../controllers/users');
 
 router.get('/',authCheck,UserController.getAllUsers);
 
-router.get('/:userId',UserController.getUserById );
+router.get('/:userId',authCheck,UserController.getUserById );
 
 router.post('/register',userValidationRules(),validate,UserController.addUser );
 router.post('/login',UserController.loginUser);
-router.delete('/:userId',UserController.deleteUser );
+router.delete('/:userId',authCheck,UserController.deleteUser );
 
-router.patch('/:userId',UserController.updateUser );
+router.patch('/:userId',authCheck,UserController.updateUser );
 
 
 module.exports = router;
