@@ -1,5 +1,5 @@
 {
-  "name": "requestsproject",
+  "name": "data_validator",
   "version": "1.0.0",
   "description": "Tool for requests sending and response checking",
   "main": "server.js",
@@ -11,11 +11,13 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.19.0",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-validator": "^6.2.0",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.7.7",
     "morgan": "^1.9.1",
     "nodemon": "^1.19.4"

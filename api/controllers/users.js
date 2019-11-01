@@ -1,5 +1,53 @@
 const UserDoc = require('../models/users');
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
+
+module.exports.loginUser = (req, res, next) => {
+    UserDoc.find({
+            email: req.body.email
+        })
+        .exec()
+        .then(user => {
+            if (user.length < 1) {
+                return res.status(401).json({
+                    message: 'Auth failed'
+                });
+            }
+            console.log(user);
+
+            bcrypt.compare(req.body.password, user[0].password).then(result => {
+               
+                if (result) {
+                    const token = jwt.sign(
+                        {
+                        email: user[0].email,
+                        _id: user[0]._id
+                    }, process.env.JWT_KEY,
+                    {
+                        expiresIn: "1h"
+                    });
+                    return res.status(200).json({
+                        message: 'Auth succesful',
+                        token : token
+                    });
+                }
+                return res.status(401).json({
+                    message: 'Auth failed'
+                });
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        });
+}
+
+
+
 
 
 module.exports.getAllUsers = (req, res, next) => {
@@ -58,43 +106,47 @@ module.exports.getUserById = (req, res, next) => {
         });;
 };
 module.exports.addUser = (req, res, next) => {
-    const user = new UserDoc({
-        _id: new mongoose.Types.ObjectId(),
-        email: req.body.email,
-        password: req.body.password,
-        created_at: new Date().toISOString()
+    bcrypt.hash(req.body.password, 10, (err, hash) => {
 
-    });
-    user
-        .save()
-        .then(result => {
-            console.log(result);
-            res.status(201).json({
-                message: 'User created',
-                createdUser: {
-                    _id: result._id,
-                    email: result.email,
-                    password: result.password,
-                    created_at: result.created_at,
+        const user = new UserDoc({
+            _id: new mongoose.Types.ObjectId(),
+            email: req.body.email,
+            password: hash,
+            created_at: new Date().toISOString()
+
+        });
+        user
+            .save()
+            .then(result => {
+                console.log(result);
+                res.status(201).json({
+                    message: 'User created',
+                    createdUser: user,
                     request: {
                         type: 'GET',
-                        description : 'Get single user',
+                        description: 'Get single user',
                         url: `${req.headers.host}/users/${result.id}`
                     }
-                }
+                });
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err
+                });
             });
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        });
+
+
+
+
+    })
+
+
 };
 
 module.exports.deleteUser = (req, res, next) => {
     const id = req.params.userId;
-    UserDoc.remove({
+    UserDoc.deleteOne({
             _id: id
         })
         .exec()
