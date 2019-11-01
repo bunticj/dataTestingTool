@@ -3,8 +3,9 @@ const logger = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const app = express();
 
+require('dotenv').config();
+const app = express();
 const userRoutes = require('./api/routes/users');
 const reqRoutes = require('./api/routes/requests');
 

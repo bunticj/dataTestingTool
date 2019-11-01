@@ -44,7 +44,7 @@ axios.get(reqUrl, {
         requestCreatedAt : new Date().toISOString(),
         title : reqTitle,
         description : reqDescription,
-        label : reqLabel,
+        label : reqLabel
         //responseId : responseDoc._id
     });
     requestDoc.save((err, req) => {
@@ -52,7 +52,7 @@ axios.get(reqUrl, {
             
             throw err;
         }
-        console.log(req);
+    //    console.log(req);
     });
 
 
@@ -69,10 +69,8 @@ axios.get(reqUrl, {
         if (err){
             throw err;
         }
-        console.log(response);
-    })
+    });
     requestDoc.relatedResponses.push(responseDoc._id);
-    requestDoc.save();
     
     res.status(200).json({
         responseDocument : responseDoc,
