@@ -36,15 +36,15 @@ axios.get(reqUrl, {
     const requestDoc = new RequestDoc({
         _id: new mongoose.Types.ObjectId(),
         url: response.config.url,
-        host: url.parse(response.config.url).host,
-        pathname: url.parse(response.config.url).pathname,
-        query: reqQueryObj || 0,
+        baseUrl: url.parse(response.config.url).host,
+        path: url.parse(response.config.url).pathname,
+        queryParams: reqQueryObj || 0,
         method: response.config.method,
         requestHeaders: response.config.headers,
         requestCreatedAt : new Date().toISOString(),
         title : reqTitle,
         description : reqDescription,
-        label : reqLabel
+        label : reqLabel,
         //responseId : responseDoc._id
     });
     requestDoc.save((err, req) => {
@@ -62,7 +62,6 @@ axios.get(reqUrl, {
        responseData : response.data,
        responseText : response.statusText,
        responseStatus : response.status,
-       responseHeaders : response.headers,
        responseCreatedAt : new Date().toISOString(),
        requestId: requestDoc._id 
     });
@@ -72,7 +71,9 @@ axios.get(reqUrl, {
         }
         console.log(response);
     })
-
+    requestDoc.relatedResponses.push(responseDoc._id);
+    requestDoc.save();
+    
     res.status(200).json({
         responseDocument : responseDoc,
         requestDocument : requestDoc

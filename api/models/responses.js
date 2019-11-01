@@ -5,10 +5,11 @@ const responseSchema = new mongoose.Schema({
    responseData : {type : Array,required:true},
    responseText : {type : String,required : true},
    responseStatus : {type : Number,required : true},
-   responseHeaders : {},
    responseCreatedAt : {type : Date,required : true},
-   requestId : {type : mongoose.Schema.Types.ObjectId, ref:'RequestDoc',required : true }
-});
+   requestId : {type : mongoose.Schema.Types.ObjectId, ref:'RequestDoc',required : true },
+   
+},{strict: false});
+
 
 module.exports = mongoose.model('ResponseDoc',responseSchema);
 

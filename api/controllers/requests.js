@@ -29,7 +29,7 @@ module.exports.getRequest = (req, res, next) => {
     RequestDoc.find()
         .exec().then(result => {
             const response = {
-                requestNumber: result.length,
+                totalRecordCount: result.length,
                 requests: result.map(doc => {
                     return {
                         request: doc,

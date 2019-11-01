@@ -2,24 +2,55 @@ const mongoose = require('mongoose');
 
 const reqSchema = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    url : {type : String,required : true},
-    host : {type: String, required : true},
-    pathname : {type : String, required : true},
-    query : {},
-    method : {type : String , required : true},
-    title : {type : String},
-    description : {type : String},
-    label : {type : String},
-    requestHeaders :  {},
-    body : {},
-    requestCreatedAt : {type : Date,required : true}
-  
-    // response  dokument nastaje prije nastanka responseID-a ,naci rjesenje
-   // responseId : [{type : mongoose.Schema.Types.ObjectId, ref:'ResponseDoc',required : true}]
-    //creatorID dodati nakon tokena ,jer cu iz njega izvuci id
+    method: {
+        type: String,
+        required: true
+    },
+    url: {
+        type: String,
+        required: true
+    },  
+
+    baseUrl: {
+        type: String,
+        required: true
+    },
+    path: {
+        type: String,
+        required: true
+    },
+    queryParams: {},
+   
+    title: {
+        type: String
+    },
+    description: {
+        type: String
+    },
+    label: {
+        type: String,
+        required: true
+    },
+    requestHeaders: {},
+    body: {}, //required dodati manualno ako je post req
+    requestCreatedAt: {
+        type: Date,
+        required: true
+    },
+    verified :  {type : Boolean,required : true,default : false},
+    verifiedResponseId : {type : mongoose.Schema.Types.ObjectId, ref : 'ResponseDoc',},
+    verifiedByUser : {type : mongoose.Schema.Types.ObjectId , ref:'UserDoc'},
+    responseVerifiedAt :{type : Date},
+    relatedResponses : {type : Array},
+
+
+}, {
+    strict: false
 });
 
-module.exports = mongoose.model('RequestDoc',reqSchema);
 
 
+//creatorID dodati nakon tokena ,jer cu iz njega izvuci id
 
+
+module.exports = mongoose.model('RequestDoc', reqSchema);

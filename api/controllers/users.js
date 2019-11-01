@@ -1,9 +1,9 @@
-const User = require('../models/users');
+const UserDoc = require('../models/users');
 const mongoose = require('mongoose');
 
 
 module.exports.getAllUsers = (req, res, next) => {
-    User.find()
+    UserDoc.find()
         .exec()
         .then(result => {
             const response = {
@@ -13,11 +13,12 @@ module.exports.getAllUsers = (req, res, next) => {
                         user: doc,
                         request: {
                             type: 'GET',
-                            url: 'http://localhost:4000/users/' + doc._id
+                            url: `${req.headers.host}/users/${doc._id}`
                         }
                     }
                 })
             };
+            console.log(req.headers.host);
             res.status(200).json(response);
         })
         .catch(err => {
@@ -30,7 +31,7 @@ module.exports.getAllUsers = (req, res, next) => {
 
 module.exports.getUserById = (req, res, next) => {
     const id = req.params.userId;
-    User.findById(id)
+    UserDoc.findById(id)
         .exec()
         .then(result => {
             console.log(result);
@@ -40,7 +41,7 @@ module.exports.getUserById = (req, res, next) => {
                     request: {
                         type: 'GET',
                         description: 'Get all users',
-                        url: 'http://localhost:4000/users/'
+                        url: `${req.headers.host}/users/`
                     }
                 })
             } else {
@@ -57,7 +58,7 @@ module.exports.getUserById = (req, res, next) => {
         });;
 };
 module.exports.addUser = (req, res, next) => {
-    const user = new User({
+    const user = new UserDoc({
         _id: new mongoose.Types.ObjectId(),
         email: req.body.email,
         password: req.body.password,
@@ -78,7 +79,7 @@ module.exports.addUser = (req, res, next) => {
                     request: {
                         type: 'GET',
                         description : 'Get single user',
-                        url: 'http://localhost:4000/users/' + result._id
+                        url: `${req.headers.host}/users/${result.id}`
                     }
                 }
             });
@@ -93,7 +94,7 @@ module.exports.addUser = (req, res, next) => {
 
 module.exports.deleteUser = (req, res, next) => {
     const id = req.params.userId;
-    User.remove({
+    UserDoc.remove({
             _id: id
         })
         .exec()
@@ -116,7 +117,7 @@ module.exports.updateUser = (req, res, next) => {
     for (const ops of req.body) {
         updateOps[ops.propName] = ops.value;
     }
-    User.update({
+    UserDoc.update({
             _id: id
         }, {
             $set: updateOps
@@ -129,7 +130,7 @@ module.exports.updateUser = (req, res, next) => {
                 request: {
                     type: 'GET',
                     description: 'Get user',
-                    url: 'http://localhost:4000/users/' + id
+                    url: `${req.headers.host}/users/${id}`
 
                 }
             });
