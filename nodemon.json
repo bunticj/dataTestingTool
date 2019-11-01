@@ -1,7 +1,0 @@
-{
-    "env" : {
-        "MONGO_PW": "sifrazasendgrid123",
-        "MONGO_USER": "testniAcc",
-        "MONGO_DB": "requestProject"
-    }
-}
