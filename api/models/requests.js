@@ -42,6 +42,7 @@ const reqSchema = new mongoose.Schema({
     verifiedByUser : {type : mongoose.Schema.Types.ObjectId , ref:'UserDoc'},
     responseVerifiedAt :{type : Date},
     relatedResponses : {type : Array},
+    creatorId : {type : mongoose.Schema.Types.ObjectId,ref:'UserDoc',required:true}
 //creatorID dodati nakon tokena ,jer cu iz njega izvuci id
 
 

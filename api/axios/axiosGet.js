@@ -7,7 +7,7 @@ const ResponseDoc = require('../models/responses');
 
 
 
-module.exports.getAxios = (reqUrl,reqHeaders,reqTitle,reqDescription,reqLabel,res) => {
+module.exports.getAxios = (reqUrl,reqHeaders,reqTitle,reqDescription,reqLabel,req,res) => {
     
 
 axios.get(reqUrl, {
@@ -31,7 +31,6 @@ axios.get(reqUrl, {
             reqQueryObj[splittedQuery[0]] = splittedQuery[1];
         }
     }
-
     //save request in db                     
     const requestDoc = new RequestDoc({
         _id: new mongoose.Types.ObjectId(),
@@ -44,7 +43,10 @@ axios.get(reqUrl, {
         requestCreatedAt : new Date().toISOString(),
         title : reqTitle,
         description : reqDescription,
-        label : reqLabel
+        label : reqLabel,
+        
+        creatorId :req.userData._id,
+        creatorEmail: req.userData._id
         //responseId : responseDoc._id
     });
     requestDoc.save((err, req) => {
