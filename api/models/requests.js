@@ -42,15 +42,14 @@ const reqSchema = new mongoose.Schema({
     verifiedByUser : {type : mongoose.Schema.Types.ObjectId , ref:'UserDoc'},
     responseVerifiedAt :{type : Date},
     relatedResponses : {type : Array},
+//creatorID dodati nakon tokena ,jer cu iz njega izvuci id
 
 
-}, {
-    strict: false
+ 
 });
 
 
 
-//creatorID dodati nakon tokena ,jer cu iz njega izvuci id
 
 
 module.exports = mongoose.model('RequestDoc', reqSchema);
