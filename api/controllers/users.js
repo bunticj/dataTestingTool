@@ -3,6 +3,50 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+module.exports.addUser = (req, res, next) => {
+    bcrypt.hash(req.body.password, 10, (err, hash) => {
+
+        const user = new UserDoc({
+            _id: new mongoose.Types.ObjectId(),
+            email: req.body.email,
+            password: hash,
+            created_at: new Date().toISOString()
+
+        });
+        user
+            .save()
+            .then(result => {
+
+                const token = jwt.sign({
+                    email: user.email,
+                    _id: user._id
+                }, process.env.JWT_KEY, {
+                    expiresIn: "1h"
+                });
+
+                console.log(result);
+                res.status(201).json({
+                    message: 'User created',
+                    createdUser: user,
+                    token: token,
+                    request: {
+                        type: 'GET',
+                        description: 'Get single user',
+                        url: `${req.headers.host}/users/${result.id}`
+                    }
+                });
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err
+                });
+            });
+
+    })
+
+
+};
 
 module.exports.loginUser = (req, res, next) => {
     UserDoc.find({
@@ -18,19 +62,17 @@ module.exports.loginUser = (req, res, next) => {
             console.log(user);
 
             bcrypt.compare(req.body.password, user[0].password).then(result => {
-               
+
                 if (result) {
-                    const token = jwt.sign(
-                        {
+                    const token = jwt.sign({
                         email: user[0].email,
                         _id: user[0]._id
-                    }, process.env.JWT_KEY,
-                    {
+                    }, process.env.JWT_KEY, {
                         expiresIn: "1h"
                     });
                     return res.status(200).json({
                         message: 'Auth succesful',
-                        token : token
+                        token: token
                     });
                 }
                 return res.status(401).json({
@@ -105,27 +147,60 @@ module.exports.getUserById = (req, res, next) => {
             });
         });;
 };
-module.exports.addUser = (req, res, next) => {
-    bcrypt.hash(req.body.password, 10, (err, hash) => {
 
-        const user = new UserDoc({
-            _id: new mongoose.Types.ObjectId(),
-            email: req.body.email,
-            password: hash,
-            created_at: new Date().toISOString()
 
+module.exports.deleteUser = (req, res, next) => {
+    const id = req.params.userId;
+    if (id === req.userData._id) {
+        UserDoc.deleteOne({
+                _id: id
+            })
+            .exec()
+            .then(result => {
+                res.status(200).json({
+                    message: 'User deleted!'
+                });
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err
+                });
+            });
+
+    } else {
+        res.status(401).json({
+            message: "Unauthorized!"
         });
-        user
-            .save()
+    }
+
+};
+
+//In postman ,use array of objects with propName:key,propValue:value 
+module.exports.updateUser = (req, res, next) => {
+    const id = req.params.userId;
+
+    if (id === req.userData._id) {
+
+        const updateOps = {};
+        for (const ops of req.body) {
+            updateOps[ops.propName] = ops.value;
+        }
+        UserDoc.update({
+                _id: id
+            }, {
+                $set: updateOps
+            })
+            .exec()
             .then(result => {
                 console.log(result);
-                res.status(201).json({
-                    message: 'User created',
-                    createdUser: user,
+                res.status(200).json({
+                    message: 'User updated',
                     request: {
                         type: 'GET',
-                        description: 'Get single user',
-                        url: `${req.headers.host}/users/${result.id}`
+                        description: 'Get user',
+                        url: `${req.headers.host}/users/${id}`
+
                     }
                 });
             })
@@ -137,60 +212,10 @@ module.exports.addUser = (req, res, next) => {
             });
 
 
-
-
-    })
-
-
-};
-
-module.exports.deleteUser = (req, res, next) => {
-    const id = req.params.userId;
-    UserDoc.deleteOne({
-            _id: id
-        })
-        .exec()
-        .then(result => {
-            res.status(200).json({
-                message: 'User deleted!'
-            });
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
+    }else{
+        res.status(401).json({
+            message: "Unauthorized!"
         });
-};
-//In postman ,use array of objects with propName:key,propValue:value 
-module.exports.updateUser = (req, res, next) => {
-    const id = req.params.userId;
-    const updateOps = {};
-    for (const ops of req.body) {
-        updateOps[ops.propName] = ops.value;
     }
-    UserDoc.update({
-            _id: id
-        }, {
-            $set: updateOps
-        })
-        .exec()
-        .then(result => {
-            console.log(result);
-            res.status(200).json({
-                message: 'User updated',
-                request: {
-                    type: 'GET',
-                    description: 'Get user',
-                    url: `${req.headers.host}/users/${id}`
 
-                }
-            });
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        });
 };
