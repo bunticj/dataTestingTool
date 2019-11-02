@@ -12,11 +12,11 @@ module.exports.postRequest = (req, res, next) => {
     const reqTitle = req.body.title;
     const reqDescription = req.body.description;
     const reqLabel = req.body.label || 'Unsorted';
-    
+
     switch (reqMethod) {
         case 'get':
             //call axios get request 
-            getAxios(reqUrl, reqHeaders, reqTitle, reqDescription, reqLabel,req, res);
+            getAxios(reqUrl, reqHeaders, reqTitle, reqDescription, reqLabel, req, res);
             break;
         case 'post':
 
@@ -81,3 +81,10 @@ module.exports.getSingleRequest = (req, res, next) => {
         });
 
 };
+
+module.exports.updateRequest = (req, res, next) => {
+
+
+
+
+}

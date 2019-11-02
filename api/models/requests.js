@@ -9,7 +9,7 @@ const reqSchema = new mongoose.Schema({
     url: {
         type: String,
         required: true
-    },  
+    },
 
     baseUrl: {
         type: String,
@@ -20,7 +20,7 @@ const reqSchema = new mongoose.Schema({
         required: true
     },
     queryParams: {},
-   
+
     title: {
         type: String
     },
@@ -37,14 +37,33 @@ const reqSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
-    verified :  {type : Boolean,required : true,default : false},
-    verifiedResponseId : {type : mongoose.Schema.Types.ObjectId, ref : 'ResponseDoc',},
-    verifiedByUser : {type : mongoose.Schema.Types.ObjectId , ref:'UserDoc'},
-    responseVerifiedAt :{type : Date},
-    relatedResponses : {type : Array},
-    creatorId : {type : mongoose.Schema.Types.ObjectId,ref:'UserDoc',required:true}
+    verified: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    verifiedResponseId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ResponseDoc',
+    },
+    verifiedByUser: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'UserDoc'
+    },
+    responseVerifiedAt: {
+        type: Date
+    },
+    relatedResponses: {
+        type: Array
+    },
+    creatorId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'UserDoc',
+        required: true
+    }
 
- 
+}, {
+    versionKey: false
 });
 
 

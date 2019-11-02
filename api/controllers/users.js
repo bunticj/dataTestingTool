@@ -176,7 +176,7 @@ module.exports.deleteUser = (req, res, next) => {
 
 };
 
-//In postman ,use array of objects with propName:key,propValue:value 
+//In postman : [{"propName":"nameOfkeyToUpdate","value":"valueOfkey" }]
 module.exports.updateUser = (req, res, next) => {
     const id = req.params.userId;
 
@@ -186,11 +186,13 @@ module.exports.updateUser = (req, res, next) => {
         for (const ops of req.body) {
             updateOps[ops.propName] = ops.value;
         }
-        UserDoc.update({
+        UserDoc.findOneAndUpdate({
                 _id: id
             }, {
-                $set: updateOps
+                $set: updateOps,
+                updatedAt: new Date().toISOString()
             })
+
             .exec()
             .then(result => {
                 console.log(result);
@@ -212,7 +214,7 @@ module.exports.updateUser = (req, res, next) => {
             });
 
 
-    }else{
+    } else {
         res.status(401).json({
             message: "Unauthorized!"
         });
