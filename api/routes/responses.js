@@ -5,7 +5,7 @@ const authCheck = require('../middlewares/auth');
 const ResponseController = require('../controllers/responses');
 
 //get all responses
-router.get('/'/*,authCheck*/,ResponseController.getAllResponses);
+router.get('/',authCheck,ResponseController.getAllResponses);
 
 
 module.exports = router;

@@ -3,13 +3,13 @@ const axios = require('axios');
 const RequestDoc = require('../models/requests');
 const ResponseDoc = require('../models/responses');
 
-module.exports.getAxios = (req,res,next) => {
-var requestId = "5dbc69d404e5ec2b2841e801";
+module.exports.getAxios = (req, res, next) => {
+    const requestId = req.body.requestId;
     RequestDoc.findById(requestId)
         .exec()
         .then(result => {
-           // console.log(result);
-console.log(result.url,'result url   ',result.headers,'resul headte');
+            // console.log(result);
+            console.log(result.url, 'result url   ', result.headers, 'resul headte');
             if (result) {
                 axios.get(result.url, {
                         headers: result.headers
@@ -32,14 +32,13 @@ console.log(result.url,'result url   ',result.headers,'resul headte');
                         result.relatedResponses.push(responseDoc._id);
                         res.status(200).json({
                             responseDocument: responseDoc,
-                          //  requestDocument: result
+                            //  requestDocument: result
 
                         });
                     })
                     .catch(error => console.log(error));
 
-            }
-            else {
+            } else {
                 console.log('nesto fgdsfdsfdsfdsfds');
             }
 
