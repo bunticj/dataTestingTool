@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+
 module.exports.addUser = (req, res, next) => {
     bcrypt.hash(req.body.password, 10, (err, hash) => {
 
@@ -21,7 +22,7 @@ module.exports.addUser = (req, res, next) => {
                     email: user.email,
                     _id: user._id
                 }, process.env.JWT_KEY, {
-                    expiresIn: "1h"
+                    expiresIn: "8h"
                 });
 
                 console.log(result);
@@ -68,7 +69,7 @@ module.exports.loginUser = (req, res, next) => {
                         email: user[0].email,
                         _id: user[0]._id
                     }, process.env.JWT_KEY, {
-                        expiresIn: "1h"
+                        expiresIn: "8h"
                     });
                     return res.status(200).json({
                         message: 'Auth succesful',

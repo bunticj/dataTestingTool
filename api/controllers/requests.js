@@ -35,7 +35,7 @@ module.exports.getRequest = (req, res, next) => {
                         request: doc,
                         singleRequest: {
                             type: 'GET',
-                            url: 'http://localhost:4000/requests/' + doc._id
+                            url: `${req.headers.host}/requests/${doc._id}`
                         }
                     }
                 })
@@ -62,7 +62,7 @@ module.exports.getSingleRequest = (req, res, next) => {
                     request: result,
                     allRequests: {
                         type: 'GET',
-                        url: 'http://localhost:4000/requests/'
+                        url: `${req.headers.host}/requests`
 
                     }
                 })
@@ -83,7 +83,7 @@ module.exports.getSingleRequest = (req, res, next) => {
 };
 
 module.exports.updateRequest = (req, res, next) => {
-
+const reqId = req.params._id
 
 
 
