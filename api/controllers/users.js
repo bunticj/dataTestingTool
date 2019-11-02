@@ -14,8 +14,7 @@ module.exports.addUser = (req, res, next) => {
             created_at: new Date().toISOString()
 
         });
-        user
-            .save()
+        user.save()
             .then(result => {
 
                 const token = jwt.sign({
@@ -98,7 +97,7 @@ module.exports.getAllUsers = (req, res, next) => {
         .exec()
         .then(result => {
             const response = {
-                userNumber: result.length,
+                totalRecordCount: result.length,
                 users: result.map(doc => {
                     return {
                         user: doc,
@@ -193,7 +192,6 @@ module.exports.updateUser = (req, res, next) => {
                 $set: updateOps,
                 updatedAt: new Date().toISOString()
             })
-
             .exec()
             .then(result => {
                 console.log(result);

@@ -1,7 +1,7 @@
 const RequestDoc = require('../models/requests');
 const mongoose = require('mongoose');
-const getAxios = require('../axios/axiosGet').getAxios;
 
+const url = require('url');
 
 
 module.exports.postRequest = (req, res, next) => {
@@ -13,15 +13,59 @@ module.exports.postRequest = (req, res, next) => {
     const reqDescription = req.body.description;
     const reqLabel = req.body.label || 'Unsorted';
 
-    switch (reqMethod) {
-        case 'get':
-            //call axios get request 
-            getAxios(reqUrl, reqHeaders, reqTitle, reqDescription, reqLabel, req, res);
-            break;
-        case 'post':
+    const reqQueryString = url.parse(reqUrl).query;
+    //check queries in url ,and handle if there is one,none or many
+    if (reqQueryString) {
+        var reqQueryObj = {};
 
-            break;
+        if (reqQueryString.indexOf('&') > -1) {
+            let splittedQuery = reqQueryString.split('&');
+            splittedQuery.forEach(element => {
+                let splittedElem = element.split('=');
+                console.log(splittedElem, 'splitted in array ')
+                reqQueryObj[splittedElem[0]] = splittedElem[1];
+            });
+        } else {
+            let splittedQuery = reqQueryString.split('=');
+            reqQueryObj[splittedQuery[0]] = splittedQuery[1];
+        }
     }
+    //save request in db                     
+    const requestDoc = new RequestDoc({
+        _id: new mongoose.Types.ObjectId(),
+        url: reqUrl,
+        baseUrl: url.parse(reqUrl).host,
+        path: url.parse(reqUrl).pathname,
+        queryParams: reqQueryObj || 0,
+        method: reqMethod,
+        requestHeaders: reqHeaders,
+        requestCreatedAt: new Date().toISOString(),
+        title: reqTitle,
+        description: reqDescription,
+        label: reqLabel,
+        creatorId: req.userData._id,
+        creatorEmail: req.userData.email
+        //responseId : responseDoc._id
+    });
+    requestDoc.save()
+        .exec()
+        .then(result => {
+            console.log(result);
+            res.status(201).json({
+                message: 'Request created',
+                createdRequest : result
+
+            })
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        });
+
+
+
 }
 
 //get all requests
@@ -63,7 +107,6 @@ module.exports.getSingleRequest = (req, res, next) => {
                     allRequests: {
                         type: 'GET',
                         url: `${req.headers.host}/requests`
-
                     }
                 })
             } else {
@@ -83,8 +126,39 @@ module.exports.getSingleRequest = (req, res, next) => {
 };
 
 module.exports.updateRequest = (req, res, next) => {
-const reqId = req.params._id
+    const reqId = req.params.requestId
 
+    if (Object.keys(req.body).length > 0) {
+
+        const updateOps = {};
+        for (const ops of req.body) {
+            updateOps[ops.propName] = ops.value;
+        }
+        RequestDoc.findByIdAndUpdate({
+                _id: reqId
+            }, {
+                $set: updateOps,
+                updatedAt: new Date().toISOString()
+            }, {
+                new: true
+            })
+            .exec()
+            .then(result => {
+                // console.log(result);
+                res.status(200).json({
+                    message: 'Request updated',
+                    updatedRequest: result
+                })
+
+
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err
+                });
+            });
+    }
 
 
 }

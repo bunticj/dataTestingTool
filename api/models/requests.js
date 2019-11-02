@@ -60,6 +60,9 @@ const reqSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'UserDoc',
         required: true
+    },
+    updatedAt: {
+        type: Date
     }
 
 }, {

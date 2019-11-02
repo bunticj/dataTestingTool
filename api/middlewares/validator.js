@@ -12,6 +12,8 @@ module.exports.reqValidationRules = () => {
 
         body('method')
         .not().isEmpty().withMessage('Field is empty')
+        
+        
     ]
 };
 module.exports.userValidationRules = () => {
