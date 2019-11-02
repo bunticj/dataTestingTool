@@ -8,7 +8,7 @@ const responseSchema = new mongoose.Schema({
    responseCreatedAt : {type : Date,required : true},
    requestId : {type : mongoose.Schema.Types.ObjectId, ref:'RequestDoc',required : true },
    
-},{strict: false});
+},);
 
 
 module.exports = mongoose.model('ResponseDoc',responseSchema);
