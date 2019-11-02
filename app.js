@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use('/users', userRoutes);
+app.use('/', userRoutes);
 app.use('/requests',reqRoutes);
 
 app.use((req,res,next) => {
