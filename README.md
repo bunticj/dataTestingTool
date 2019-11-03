@@ -6,6 +6,7 @@ QA Tool for http requests
 ```
 node.js
 npm
+mongoDB account
 ```
 #### Project setup
 ```
