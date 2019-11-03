@@ -43,7 +43,6 @@ const responseSchema = new mongoose.Schema({
     },
     verifiedByUserEmail : {
         type : String,
-        required : true,
         ref : 'UserDoc'
     },
     updatedAt: {

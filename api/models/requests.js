@@ -52,7 +52,6 @@ const reqSchema = new mongoose.Schema({
     },
     verifiedByUserEmail : {
         type : String,
-        required : true,
         ref : 'UserDoc'
     },
     requestVerifiedAt: {
@@ -72,7 +71,6 @@ const reqSchema = new mongoose.Schema({
     },
     creatorEmail: {
         type: String,
-        required: true,
         ref: 'UserDoc'
     },
     updatedAt: {

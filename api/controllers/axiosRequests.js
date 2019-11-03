@@ -11,7 +11,7 @@ module.exports.getAxios = (req, res, next) => {
             if (result) {
 
                 axios.get(result.url, {
-                        headers: result.headers
+                        headers: result.requestHeaders
                     })
                     .then(response => {
                         //save response in db
