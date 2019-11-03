@@ -6,7 +6,6 @@ QA Tool for http requests
 ```
 node.js
 npm
-
 ```
 #### Project setup
 ```
@@ -15,12 +14,10 @@ MONGO_USER=MongoDBUserName
 MONGO_PW=MongoDBPassword
 MONGO_DB=MongoDatabaseName
 JWT_KEY=yourSecretStringKey
-
 ```
 
 ```
 npm install
-
 ```
 
 #### Project run
