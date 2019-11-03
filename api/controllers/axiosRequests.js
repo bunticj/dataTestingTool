@@ -21,7 +21,10 @@ module.exports.getAxios = (req, res, next) => {
                             responseText: response.statusText,
                             responseStatus: response.status,
                             responseCreatedAt: new Date().toISOString(),
-                            requestId: requestId
+                            creatorId: req.userData._id,
+                            creatorEmail : req.userData.email,
+                            requestId: requestId,
+                            isChecked :false,
                         });
                         responseDoc.save((err) => {
                             if (err) {
@@ -32,8 +35,8 @@ module.exports.getAxios = (req, res, next) => {
                         result.save();
                         console.log('result related response', result.relatedResponses);
                         res.status(200).json({
+                            message : "Response created",
                             responseDocument: responseDoc,
-                            //  requestDocument: result
 
                         });
                     })
