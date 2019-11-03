@@ -13,7 +13,7 @@ module.exports.postRequest = (req, res, next) => {
     const reqTitle = req.body.title;
     const reqDescription = req.body.description;
     const reqLabel = req.body.label || 'Unsorted';
-
+    const reqTag = req.body.tag ;
     const reqQueryString = url.parse(reqUrl).query;
     //check queries in url ,and handle if there is one,none or many
     if (reqQueryString) {
@@ -46,7 +46,8 @@ module.exports.postRequest = (req, res, next) => {
         description: reqDescription,
         label: reqLabel,
         creatorId: req.userData._id,
-        creatorEmail: req.userData.email
+        creatorEmail: req.userData.email,
+        tag : reqTag
         //responseId : responseDoc._id
     });
     requestDoc.save()
@@ -115,7 +116,6 @@ module.exports.getSingleRequest = (req, res, next) => {
                     message: 'Request not found'
                 });
             }
-
         })
         .catch(err => {
             console.log(err);
@@ -135,8 +135,9 @@ module.exports.updateRequest = (req, res, next) => {
         for (const ops of req.body) {
             updateOps[ops.propName] = ops.value;
           
-            if(ops.propName === 'verified' && ops.value=== true){
+            if(ops.propName === 'verified' && ops.value == 'true'){
                 var verifByUser = req.userData._id
+                var verifEmail = req.userData.email;
                var verifAt = new Date().toISOString(); 
                console.log('Usao u if');
             
@@ -154,8 +155,9 @@ module.exports.updateRequest = (req, res, next) => {
             .exec()
             .then(result => {
                 result.updatedAt.push(new Date().toISOString());
-                result.verifiedByUser = verifByUser || 0;
+                result.verifiedByUser = verifByUser || null;
                 result.requestVerifiedAt = verifAt || null ;
+                result.verifiedByUserEmail = verifEmail || null;
                 // console.log(result);
                 res.status(200).json({
                     message: 'Request updated',

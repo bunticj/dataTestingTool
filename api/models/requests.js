@@ -50,6 +50,11 @@ const reqSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'UserDoc'
     },
+    verifiedByUserEmail : {
+        type : String,
+        required : true,
+        ref : 'UserDoc'
+    },
     requestVerifiedAt: {
         type: Date
     },
@@ -72,6 +77,10 @@ const reqSchema = new mongoose.Schema({
     },
     updatedAt: {
         type: Array
+    },
+    
+    tag : {
+        type : Array
     }
 
 }, {
