@@ -50,8 +50,12 @@ const reqSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'UserDoc'
     },
-    responseVerifiedAt: {
+    requestVerifiedAt: {
         type: Date
+    },
+    responseVerifiedAt: {
+        type: Date,
+        ref:'ResponseDoc'
     },
     relatedResponses: {
         type: Array
@@ -61,8 +65,13 @@ const reqSchema = new mongoose.Schema({
         ref: 'UserDoc',
         required: true
     },
+    creatorEmail: {
+        type: String,
+        required: true,
+        ref: 'UserDoc'
+    },
     updatedAt: {
-        type: Date
+        type: Array
     }
 
 }, {

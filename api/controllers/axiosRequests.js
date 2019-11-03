@@ -6,11 +6,10 @@ const ResponseDoc = require('../models/responses');
 module.exports.getAxios = (req, res, next) => {
     const requestId = req.body.requestId;
     RequestDoc.findById(requestId)
-        .exec()
         .then(result => {
-            // console.log(result);
-            console.log(result.url, 'result url   ', result.headers, 'resul headte');
+            
             if (result) {
+
                 axios.get(result.url, {
                         headers: result.headers
                     })
@@ -24,23 +23,38 @@ module.exports.getAxios = (req, res, next) => {
                             responseCreatedAt: new Date().toISOString(),
                             requestId: requestId
                         });
-                        responseDoc.save((err, response) => {
+                        responseDoc.save((err) => {
                             if (err) {
                                 throw err;
                             }
                         });
                         result.relatedResponses.push(responseDoc._id);
+                        result.save();
+                        console.log('result related response', result.relatedResponses);
                         res.status(200).json({
                             responseDocument: responseDoc,
                             //  requestDocument: result
 
                         });
                     })
-                    .catch(error => console.log(error));
+                    .catch(err => {
+                        console.log(err);
+                        res.status(500).json({
+                            error: err
+                        });
+                    });
 
             } else {
-                console.log('nesto fgdsfdsfdsfdsfds');
+                console.log('Request ID not found');
+                res.status(404).json({
+                    message: "Not found"
+                })
             }
 
-        }).catch(error => console.log(error));
+        }).catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        });
 }

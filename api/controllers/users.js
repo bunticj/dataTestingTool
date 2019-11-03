@@ -72,7 +72,11 @@ module.exports.loginUser = (req, res, next) => {
                     });
                     return res.status(200).json({
                         message: 'Auth succesful',
-                        token: token
+                        token: token,
+                        request: {
+                            type: 'GET',
+                            url: `${req.headers.host}/users/${user[0]._id}`
+                        }
                     });
                 }
                 return res.status(401).json({

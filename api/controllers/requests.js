@@ -1,4 +1,5 @@
 const RequestDoc = require('../models/requests');
+const ResponseDoc = require('../models/responses');
 const mongoose = require('mongoose');
 
 const url = require('url');
@@ -30,8 +31,9 @@ module.exports.postRequest = (req, res, next) => {
             reqQueryObj[splittedQuery[0]] = splittedQuery[1];
         }
     }
-    //save request in db                     
-    const requestDoc = new RequestDoc({
+    //save request in db                 
+    console.log(req.userData, 'userdataaaaaa');    
+    var requestDoc = new RequestDoc({
         _id: new mongoose.Types.ObjectId(),
         url: reqUrl,
         baseUrl: url.parse(reqUrl).host,
@@ -48,7 +50,6 @@ module.exports.postRequest = (req, res, next) => {
         //responseId : responseDoc._id
     });
     requestDoc.save()
-        .exec()
         .then(result => {
             console.log(result);
             res.status(201).json({
@@ -126,30 +127,40 @@ module.exports.getSingleRequest = (req, res, next) => {
 };
 
 module.exports.updateRequest = (req, res, next) => {
+    
     const reqId = req.params.requestId
 
-    if (Object.keys(req.body).length > 0) {
 
         const updateOps = {};
         for (const ops of req.body) {
             updateOps[ops.propName] = ops.value;
+          
+            if(ops.propName === 'verified' && ops.value=== true){
+                var verifByUser = req.userData._id
+               var verifAt = new Date().toISOString(); 
+               console.log('Usao u if');
+            
+            
+            }
+
         }
         RequestDoc.findByIdAndUpdate({
                 _id: reqId
             }, {
-                $set: updateOps,
-                updatedAt: new Date().toISOString()
+                $set: updateOps
             }, {
                 new: true
             })
             .exec()
             .then(result => {
+                result.updatedAt.push(new Date().toISOString());
+                result.verifiedByUser = verifByUser || 0;
+                result.requestVerifiedAt = verifAt || null ;
                 // console.log(result);
                 res.status(200).json({
                     message: 'Request updated',
                     updatedRequest: result
                 })
-
 
             })
             .catch(err => {
@@ -161,4 +172,34 @@ module.exports.updateRequest = (req, res, next) => {
     }
 
 
+
+
+module.exports.deleteRequest = (req,res,next)=>{
+
+    const reqId = req.params.requestId
+
+    //delete request
+    RequestDoc.deleteOne({
+        _id: reqId
+    })
+    .exec()
+    .then(result => {
+
+        //delete all responses with deleted requestId
+        ResponseDoc.deleteMany({requestId:reqId},(err)=> {
+            if (err) {
+                throw new Error('Unable to delete response');
+            }
+        });
+        
+        res.status(200).json({
+            message: 'Request and his response deleted!'
+        });
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        });
+    });
 }
