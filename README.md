@@ -143,6 +143,10 @@ GET baseURL/requests/:requestId
 ```
 
 ```
+Get all responses for single request :
+GET baseURL/requests/:requestId/responses
+```
+```
 Delete request and all his responses :
 DELETE baseURL/requests/:requestId
 ```
