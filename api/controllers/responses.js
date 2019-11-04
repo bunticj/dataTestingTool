@@ -58,6 +58,37 @@ module.exports.getSingleResponse = (req, res, next) => {
         })
 }
 
+module.exports.getConnectedResponses = (req, res, next) => {
+    const reqId = req.params.requestId;
+
+    ResponseDoc.find({
+        requestId: reqId
+    }, (err, result) => {
+        if (err) {
+            res.status(404).json({
+                message: 'Not found'
+            });
+        }
+        console.log(result);
+
+        res.status(200).json({
+            totalRecordCount: result.length,
+            responses: result.map(doc => {
+                return {
+                    response: doc,
+
+                }
+            }),
+            getRequest: {
+                type: 'GET',
+                url: `${req.headers.host}/requests/${reqId}`
+            }
+        });
+    });
+
+
+}
+
 module.exports.updateResponse = (req, res, next) => {
     const id = req.params.responseId;
     const updateOps = {};

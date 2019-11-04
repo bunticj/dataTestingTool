@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const RequestController = require('../controllers/requests');
+const ResponseController=require('../controllers/responses');
 const {
     reqValidationRules,
     validate
@@ -14,6 +15,8 @@ router.post('/',  authCheck,reqValidationRules(), validate, RequestController.po
 router.get('/',  authCheck,RequestController.getRequest);
 //get single request
 router.get('/:requestId', authCheck,RequestController.getSingleRequest);
+//get all responses from the same request
+router.get('/:requestId/responses',authCheck,ResponseController.getConnectedResponses);
 //update request
 router.patch('/:requestId',authCheck,RequestController.updateRequest);
 //delete request
