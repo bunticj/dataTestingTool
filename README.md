@@ -30,7 +30,9 @@ npm run start
 #### Routes
 
 Request headers for routes : 
+
 Content-Type : application/json
+
 Authorization : Bearer tokenValue
 
 *unprotected routes are :  /register and /login
