@@ -98,6 +98,7 @@ module.exports.loginUser = (req, res, next) => {
 
 module.exports.getAllUsers = (req, res, next) => {
     UserDoc.find()
+        .select('-password')
         .exec()
         .then(result => {
             const response = {
@@ -126,6 +127,8 @@ module.exports.getAllUsers = (req, res, next) => {
 module.exports.getUserById = (req, res, next) => {
     const id = req.params.userId;
     UserDoc.findById(id)
+        .select('-password')
+
         .exec()
         .then(result => {
             console.log(result);
