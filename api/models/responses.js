@@ -4,7 +4,8 @@ const responseSchema = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     responseData: {
         type: Array,
-        required: true
+        required: true,
+        immutable : true
     },
     responseText: {
         type: String,

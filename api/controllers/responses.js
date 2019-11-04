@@ -64,16 +64,16 @@ module.exports.updateResponse = (req, res, next) => {
 
     for (const ops of req.body) {
         updateOps[ops.propName] = ops.value;
-
+        
         if (ops.propName === 'verified') {
             var verifByUser = req.userData._id
             var verifEmail = req.userData.email;
             var verifAt = new Date().toISOString();
             console.log('Usao u if');
-            RequestDoc.findById({id :id})
-            var isChecked = true ; 
+            var isChecked = true; 
 
         }
+      
     }
     ResponseDoc.findByIdAndUpdate({
             _id: id
@@ -84,6 +84,21 @@ module.exports.updateResponse = (req, res, next) => {
         })
         .exec()
         .then(result => {
+           console.log(result.verified);
+
+            if (result.verified == true){
+                console.log('jel usao');
+
+                RequestDoc.findById({_id : result.requestId},(err,doc)=>{
+                    if (err){
+                        throw new Error('Not found');
+                    }
+                    doc.verifiedResponseId = result._id; 
+                    doc.save();
+                    
+                })
+            }
+
             result.updatedAt.push(new Date().toISOString());
             result.verifiedByUser = verifByUser || null;
             result.responseVerifiedAt = verifAt || null;
