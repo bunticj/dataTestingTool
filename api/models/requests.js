@@ -31,7 +31,7 @@ const reqSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    requestHeaders: {},
+    headers: {},
     body: {}, //required dodati manualno ako je post req
     requestCreatedAt: {
         type: Date,
@@ -50,16 +50,16 @@ const reqSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'UserDoc'
     },
-    verifiedByUserEmail : {
-        type : String,
-        ref : 'UserDoc'
+    verifiedByUserEmail: {
+        type: String,
+        ref: 'UserDoc'
     },
     requestVerifiedAt: {
         type: Date
     },
     responseVerifiedAt: {
         type: Date,
-        ref:'ResponseDoc'
+        ref: 'ResponseDoc'
     },
     relatedResponses: {
         type: Array
@@ -76,9 +76,9 @@ const reqSchema = new mongoose.Schema({
     updatedAt: {
         type: Array
     },
-    
-    tag : {
-        type : Array
+
+    tag: {
+        type: Array
     }
 
 }, {
