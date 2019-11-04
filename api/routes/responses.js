@@ -8,6 +8,7 @@ const ResponseController = require('../controllers/responses');
 router.get('/',authCheck,ResponseController.getAllResponses);
 //get response by id
 router.get('/:responseId',authCheck,ResponseController.getSingleResponse);
+
 //update response
 router.patch('/:responseId',authCheck,ResponseController.updateResponse);
 //delete response
