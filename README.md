@@ -106,7 +106,7 @@ req.body :{
 
 ```
 Send saved request and get a response :
-POST baseURL/sendrequests
+POST baseURL/sendrequest
 req.body: {
   requestId : "requestId"
 }
