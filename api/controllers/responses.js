@@ -64,16 +64,16 @@ module.exports.updateResponse = (req, res, next) => {
 
     for (const ops of req.body) {
         updateOps[ops.propName] = ops.value;
-        
+
         if (ops.propName === 'verified') {
             var verifByUser = req.userData._id
             var verifEmail = req.userData.email;
             var verifAt = new Date().toISOString();
             console.log('Usao u if');
-            var isChecked = true; 
+            var isChecked = true;
 
         }
-      
+
     }
     ResponseDoc.findByIdAndUpdate({
             _id: id
@@ -84,18 +84,20 @@ module.exports.updateResponse = (req, res, next) => {
         })
         .exec()
         .then(result => {
-           console.log(result.verified);
+            console.log(result.verified);
 
-            if (result.verified == true){
+            if (result.verified == true) {
                 console.log('jel usao');
 
-                RequestDoc.findById({_id : result.requestId},(err,doc)=>{
-                    if (err){
+                RequestDoc.findById({
+                    _id: result.requestId
+                }, (err, doc) => {
+                    if (err) {
                         throw new Error('Not found');
                     }
-                    doc.verifiedResponseId = result._id; 
+                    doc.verifiedResponseId = result._id;
                     doc.save();
-                    
+
                 })
             }
 
@@ -115,4 +117,26 @@ module.exports.updateResponse = (req, res, next) => {
                 error: err
             });
         });
+}
+
+module.exports.deleteResponse = (req, res, next) => {
+    const id = req.params.responseId;
+    ResponseDoc.deleteOne({
+            _id: id
+        })
+        .exec()
+        .then(result => {
+            res.status(200).json({
+                message: 'Response deleted!'
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        });
+
+
+
 }

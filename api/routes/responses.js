@@ -10,5 +10,7 @@ router.get('/',authCheck,ResponseController.getAllResponses);
 router.get('/:responseId',authCheck,ResponseController.getSingleResponse);
 //update response
 router.patch('/:responseId',authCheck,ResponseController.updateResponse);
+//delete response
+router.delete('/:responseId',authCheck,ResponseController.deleteResponse);
 
 module.exports = router;
