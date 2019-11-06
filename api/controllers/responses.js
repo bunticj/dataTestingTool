@@ -5,6 +5,43 @@ const mongoose = require('mongoose');
 
 module.exports.getAllResponses = (req, res, next) => {
 
+    const query = {};
+    const filters = {
+        isChecked: req.query.isChecked,
+        verified: req.query.verified,
+        verifiedByUser: req.query.verifiedByUser,
+        comment: req.query.comment
+    };
+
+    for (let key in filters) {
+        if (filters[key]) {
+            query[key] =filters[key];
+            console.log(key,'-key,  value : ' ,  query[key]);
+        }
+    }
+    const options = {
+        page: +req.query.page || 1,
+        limit: +req.query.limit || 10,
+        sort: req.query.sort || null
+
+    };
+    ResponseDoc.paginate(query, options)
+    .then(result => {
+       // console.log(result);
+        res.status(200).json(result);
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        });
+    });
+
+
+
+    /*
+
+
     ResponseDoc.find()
         .exec()
         .then(result => {
@@ -28,7 +65,7 @@ module.exports.getAllResponses = (req, res, next) => {
                 error: err
             });
         })
-
+*/
 };
 
 
