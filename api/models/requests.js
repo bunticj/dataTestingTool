@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const paginator = require('mongoose-paginate-v2');
+
+
 
 const reqSchema = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
@@ -85,6 +88,7 @@ const reqSchema = new mongoose.Schema({
     versionKey: false
 });
 
+reqSchema.plugin(paginator);
 
 
 module.exports = mongoose.model('RequestDoc', reqSchema);
