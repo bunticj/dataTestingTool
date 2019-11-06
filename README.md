@@ -135,6 +135,19 @@ Note:if you want to change req.query.params,add them in url
 ```
 Get all requests :
 GET baseURL/requests/
+
+query params for pagination and filters
+
+page : Number,
+limit : Number,
+label : String,
+verified : Boolean,
+verifiedByUser : ObjectID,
+baseUrl : String,
+tag : String
+sort : key name to be sorted with, 
+example -> sort=description,ascending , sort=-description ,  descending with "-" operator 
+
 ```
 
 ```

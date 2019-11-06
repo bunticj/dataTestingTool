@@ -1,7 +1,6 @@
 const RequestDoc = require('../models/requests');
 const ResponseDoc = require('../models/responses');
 const mongoose = require('mongoose');
-
 const url = require('url');
 
 
@@ -48,7 +47,6 @@ module.exports.postRequest = (req, res, next) => {
         creatorId: req.userData._id,
         creatorEmail: req.userData.email,
         tag: reqTag
-        //responseId : responseDoc._id
     });
     requestDoc.save()
         .then(result => {
@@ -72,28 +70,41 @@ module.exports.postRequest = (req, res, next) => {
 
 //get all requests
 module.exports.getRequest = (req, res, next) => {
-    RequestDoc.find()
-        .exec().then(result => {
-            const response = {
-                totalRecordCount: result.length,
-                requests: result.map(doc => {
-                    return {
-                        request: doc,
-                        singleRequest: {
-                            type: 'GET',
-                            url: `${req.headers.host}/requests/${doc._id}`
-                        }
-                    }
-                })
-            };
-            res.status(200).json(response);
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
+
+    const query = {};
+    const filters = {
+        label: req.query.label,
+        verified: req.query.verified,
+        verifiedByUser: req.query.verifiedByUser,
+        baseUrl: req.query.baseUrl,
+        tag: req.query.tag
+    };
+
+    for (let key in filters) {
+        if (filters[key]) {
+            query[key] =filters[key];
+            console.log(key,'-key,  value : ' ,  query[key]);
+        }
+    }
+    const options = {
+        page: +req.query.page || 1,
+        limit: +req.query.limit || 10,
+        sort: req.query.sort || null
+
+    };
+    RequestDoc.paginate(query, options)
+    .then(result => {
+       // console.log(result);
+        res.status(200).json(result);
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
         });
+    });
+
+    
 };
 
 //get single request
