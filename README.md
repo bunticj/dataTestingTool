@@ -169,6 +169,17 @@ DELETE baseURL/requests/:requestId
 ```
 Get all responses :
 GET baseURL/responses
+
+query params for pagination and filters
+
+page : Number,
+limit : Number,
+isChecked : Boolean,
+verified : Boolean,
+verifiedByUser : ObjectID,
+comment : String
+sort : key name to be sorted with, 
+example -> sort=description,ascending , sort=-description ,  descending with "-" operator 
 ```
 
 ```
