@@ -11,8 +11,17 @@ module.exports.getAxios = (req, res, next) => {
         .then(result => {
             //find request by id and send it with axios
             if (result) {
+                var resultObj = {};
+                if (req.body.Authorization){
+                resultObj = result;
+                resultObj.headers.Authorization = req.body.Authorization;
+                }
+                else {
+                    resultObj = result;
+                }
+                
                 axios.get(result.url, {
-                        headers: result.headers
+                        headers: resultObj.headers
                     })
                     .then(response => {
                         //save response in db
@@ -35,7 +44,6 @@ module.exports.getAxios = (req, res, next) => {
                         //add responseId to request
                         result.relatedResponses.push(responseDoc._id);
                         result.save();
-                        console.log('result related response', result.relatedResponses);
                         res.status(200).json({
                             message : "Response created",
                             responseDocument: responseDoc,

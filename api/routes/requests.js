@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const RequestController = require('../controllers/requests');
-const ResponseController=require('../controllers/responses');
+const ResponseController= require('../controllers/responses');
 const {
     reqValidationRules,
     validate

@@ -109,6 +109,8 @@ Send saved request and get a response :
 POST baseURL/sendrequest
 req.body: {
   requestId : "requestId"
+  *optional field in case you want to change the value of Authorization header :
+  Authorization : "Bearer tokenValue"
 }
 ```
 
