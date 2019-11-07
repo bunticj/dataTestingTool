@@ -97,6 +97,7 @@ req.body :{
     Content-Type : application/json,
     Authorization : Bearer tokenValue
     },
+  body : Object,
   title : String,
   description : String,
   tag : Array,

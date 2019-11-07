@@ -3,27 +3,26 @@ const axios = require('axios');
 const RequestDoc = require('../models/requests');
 const ResponseDoc = require('../models/responses');
 
-//send saved request with requestId  -GET method
-module.exports.getAxios = (req, res, next) => {
+//send saved request with requestId  
+module.exports.axiosRequest = (req, res, next) => {
     const requestId = req.body.requestId;
-
     RequestDoc.findById(requestId)
         .then(result => {
             //find request by id and send it with axios
             if (result) {
                 var resultObj = {};
-                if (req.body.Authorization){
-                resultObj = result;
-                resultObj.headers.Authorization = req.body.Authorization;
-                }
-                else {
+                if (req.body.Authorization) {
+                    resultObj = result;
+                    resultObj.headers.Authorization = req.body.Authorization;
+                } else {
                     resultObj = result;
                 }
-                
-                axios.get(result.url, {
-                        headers: resultObj.headers
-                    })
-                    .then(response => {
+                axios.request({
+                        method: resultObj.method,
+                        url: resultObj.url,
+                        headers: resultObj.headers,
+                        data: resultObj.body
+                    }).then(response => {
                         //save response in db
                         const responseDoc = new ResponseDoc({
                             _id: new mongoose.Types.ObjectId(),
@@ -32,9 +31,9 @@ module.exports.getAxios = (req, res, next) => {
                             responseStatus: response.status,
                             responseCreatedAt: new Date().toISOString(),
                             creatorId: req.userData._id,
-                            creatorEmail : req.userData.email,
+                            creatorEmail: req.userData.email,
                             requestId: requestId,
-                            isChecked :false,
+                            isChecked: false,
                         });
                         responseDoc.save((err) => {
                             if (err) {
@@ -45,7 +44,7 @@ module.exports.getAxios = (req, res, next) => {
                         result.relatedResponses.push(responseDoc._id);
                         result.save();
                         res.status(200).json({
-                            message : "Response created",
+                            message: "Response created",
                             responseDocument: responseDoc,
 
                         });
