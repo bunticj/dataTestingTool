@@ -14,7 +14,7 @@ module.exports.postRequest = (req, res, next) => {
     const reqLabel = req.body.label || 'Unsorted';
     const reqTag = req.body.tag;
     const reqQueryString = url.parse(reqUrl).query;
-
+    const reqBody = req.body.body;
     //check queries in url ,and handle if there is one,none or many
     if (reqQueryString) {
         var reqQueryObj = {};
@@ -40,6 +40,7 @@ module.exports.postRequest = (req, res, next) => {
         path: url.parse(reqUrl).pathname,
         queryParams: reqQueryObj || 0,
         method: reqMethod,
+        body : reqBody || 0,
         headers: reqHeaders,
         requestCreatedAt: new Date().toISOString(),
         title: reqTitle,
