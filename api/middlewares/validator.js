@@ -5,6 +5,7 @@ const {
 const User = require('../models/users');
 
 
+//request body validation
 module.exports.reqValidationRules = () => {
     return [
         body('url')
@@ -16,6 +17,7 @@ module.exports.reqValidationRules = () => {
         
     ]
 };
+// user register validation
 module.exports.userValidationRules = () => {
     return [
         body('email')

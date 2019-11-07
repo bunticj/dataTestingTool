@@ -2,9 +2,8 @@ const ResponseDoc = require('../models/responses');
 const RequestDoc = require('../models/requests');
 const mongoose = require('mongoose');
 
-
+//get all responses
 module.exports.getAllResponses = (req, res, next) => {
-
     const query = {};
     const filters = {
         isChecked: req.query.isChecked,
@@ -13,12 +12,14 @@ module.exports.getAllResponses = (req, res, next) => {
         comment: req.query.comment
     };
 
+    //filters
     for (let key in filters) {
         if (filters[key]) {
-            query[key] =filters[key];
-            console.log(key,'-key,  value : ' ,  query[key]);
+            query[key] = filters[key];
+            console.log(key, '-key,  value : ', query[key]);
         }
     }
+    //pagination
     const options = {
         page: +req.query.page || 1,
         limit: +req.query.limit || 10,
@@ -26,21 +27,21 @@ module.exports.getAllResponses = (req, res, next) => {
 
     };
     ResponseDoc.paginate(query, options)
-    .then(result => {
-       // console.log(result);
-        res.status(200).json(result);
-    })
-    .catch(err => {
-        console.log(err);
-        res.status(500).json({
-            error: err
+        .then(result => {
+            // console.log(result);
+            res.status(200).json(result);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
         });
-    });
 
 
 };
 
-
+//get single response by id
 module.exports.getSingleResponse = (req, res, next) => {
     const id = req.params.responseId;
     ResponseDoc.findById(id)
@@ -67,6 +68,8 @@ module.exports.getSingleResponse = (req, res, next) => {
         })
 }
 
+
+//get all responses from the same request
 module.exports.getConnectedResponses = (req, res, next) => {
     const reqId = req.params.requestId;
 
@@ -99,6 +102,7 @@ module.exports.getConnectedResponses = (req, res, next) => {
 }
 
 
+//update response
 module.exports.updateResponse = (req, res, next) => {
     const id = req.params.responseId;
     const updateOps = {};
@@ -110,7 +114,6 @@ module.exports.updateResponse = (req, res, next) => {
             var verifByUser = req.userData._id
             var verifEmail = req.userData.email;
             var verifAt = new Date().toISOString();
-            console.log('Usao u if');
             var isChecked = true;
 
         }
@@ -128,8 +131,8 @@ module.exports.updateResponse = (req, res, next) => {
             console.log(result.verified);
 
             if (result.verified == true) {
-                console.log('jel usao');
 
+                //add verified responseId to request
                 RequestDoc.findById({
                     _id: result.requestId
                 }, (err, doc) => {
@@ -160,6 +163,7 @@ module.exports.updateResponse = (req, res, next) => {
         });
 }
 
+//delete response
 module.exports.deleteResponse = (req, res, next) => {
     const id = req.params.responseId;
     ResponseDoc.deleteOne({

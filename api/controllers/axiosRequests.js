@@ -3,13 +3,14 @@ const axios = require('axios');
 const RequestDoc = require('../models/requests');
 const ResponseDoc = require('../models/responses');
 
+//send saved request with requestId  -GET method
 module.exports.getAxios = (req, res, next) => {
     const requestId = req.body.requestId;
+
     RequestDoc.findById(requestId)
         .then(result => {
-            
+            //find request by id and send it with axios
             if (result) {
-
                 axios.get(result.url, {
                         headers: result.headers
                     })
@@ -31,6 +32,7 @@ module.exports.getAxios = (req, res, next) => {
                                 throw err;
                             }
                         });
+                        //add responseId to request
                         result.relatedResponses.push(responseDoc._id);
                         result.save();
                         console.log('result related response', result.relatedResponses);
@@ -46,7 +48,6 @@ module.exports.getAxios = (req, res, next) => {
                             error: err
                         });
                     });
-
             } else {
                 console.log('Request ID not found');
                 res.status(404).json({

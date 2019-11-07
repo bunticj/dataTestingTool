@@ -4,7 +4,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 
+//add new user and retrieve toke
 module.exports.addUser = (req, res, next) => {
+    //hash password
     bcrypt.hash(req.body.password, 10, (err, hash) => {
 
         const user = new UserDoc({
@@ -48,6 +50,7 @@ module.exports.addUser = (req, res, next) => {
 
 };
 
+//login user and retrieve token
 module.exports.loginUser = (req, res, next) => {
     UserDoc.find({
             email: req.body.email
@@ -61,6 +64,7 @@ module.exports.loginUser = (req, res, next) => {
             }
             console.log(user);
 
+            //check plain pass with hashed in DB
             bcrypt.compare(req.body.password, user[0].password).then(result => {
 
                 if (result) {
@@ -96,7 +100,9 @@ module.exports.loginUser = (req, res, next) => {
 
 
 
+//get all users
 module.exports.getAllUsers = (req, res, next) => {
+    //don't show password
     UserDoc.find()
         .select('-password')
         .exec()
@@ -124,6 +130,7 @@ module.exports.getAllUsers = (req, res, next) => {
         });
 };
 
+//get single user
 module.exports.getUserById = (req, res, next) => {
     const id = req.params.userId;
     UserDoc.findById(id)
@@ -156,6 +163,7 @@ module.exports.getUserById = (req, res, next) => {
 };
 
 
+//delete user
 module.exports.deleteUser = (req, res, next) => {
     const id = req.params.userId;
     if (id === req.userData._id) {

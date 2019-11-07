@@ -3,7 +3,7 @@ const ResponseDoc = require('../models/responses');
 const mongoose = require('mongoose');
 const url = require('url');
 
-
+//add new request
 module.exports.postRequest = (req, res, next) => {
 
     const reqMethod = req.body.method.toLowerCase();
@@ -14,6 +14,7 @@ module.exports.postRequest = (req, res, next) => {
     const reqLabel = req.body.label || 'Unsorted';
     const reqTag = req.body.tag;
     const reqQueryString = url.parse(reqUrl).query;
+
     //check queries in url ,and handle if there is one,none or many
     if (reqQueryString) {
         var reqQueryObj = {};
@@ -32,7 +33,7 @@ module.exports.postRequest = (req, res, next) => {
     }
     //save request in db                 
     console.log(req.userData, 'userdataaaaaa');
-    var requestDoc = new RequestDoc({
+    const requestDoc = new RequestDoc({
         _id: new mongoose.Types.ObjectId(),
         url: reqUrl,
         baseUrl: url.parse(reqUrl).host,
@@ -72,6 +73,7 @@ module.exports.postRequest = (req, res, next) => {
 module.exports.getRequest = (req, res, next) => {
 
     const query = {};
+    //available filters
     const filters = {
         label: req.query.label,
         verified: req.query.verified,
@@ -80,12 +82,14 @@ module.exports.getRequest = (req, res, next) => {
         tag: req.query.tag
     };
 
+    //add filters to query object
     for (let key in filters) {
         if (filters[key]) {
-            query[key] =filters[key];
-            console.log(key,'-key,  value : ' ,  query[key]);
+            query[key] = filters[key];
+            console.log(key, '-key,  value : ', query[key]);
         }
     }
+    //options and default values for pagination
     const options = {
         page: +req.query.page || 1,
         limit: +req.query.limit || 10,
@@ -93,18 +97,18 @@ module.exports.getRequest = (req, res, next) => {
 
     };
     RequestDoc.paginate(query, options)
-    .then(result => {
-       // console.log(result);
-        res.status(200).json(result);
-    })
-    .catch(err => {
-        console.log(err);
-        res.status(500).json({
-            error: err
+        .then(result => {
+            // console.log(result);
+            res.status(200).json(result);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
         });
-    });
 
-    
+
 };
 
 //get single request
@@ -138,11 +142,13 @@ module.exports.getSingleRequest = (req, res, next) => {
 };
 
 
+//update request
 
 module.exports.updateRequest = (req, res, next) => {
 
     const reqId = req.params.requestId;
 
+    //check which values user wants to send
     const updateOps = {};
     for (const ops of req.body) {
         updateOps[ops.propName] = ops.value;
@@ -158,6 +164,7 @@ module.exports.updateRequest = (req, res, next) => {
 
 
     }
+    //update request document by id
     RequestDoc.findByIdAndUpdate({
             _id: reqId
         }, {
@@ -188,12 +195,10 @@ module.exports.updateRequest = (req, res, next) => {
 
 
 
-
+//delete single request and his responses
 module.exports.deleteRequest = (req, res, next) => {
 
     const reqId = req.params.requestId
-
-    //delete request
     RequestDoc.deleteOne({
             _id: reqId
         })
@@ -208,7 +213,6 @@ module.exports.deleteRequest = (req, res, next) => {
                     throw new Error('Unable to delete response');
                 }
             });
-
             res.status(200).json({
                 message: 'Request and his response deleted!'
             });

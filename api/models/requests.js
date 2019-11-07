@@ -35,7 +35,7 @@ const reqSchema = new mongoose.Schema({
         required: true
     },
     headers: {},
-    body: {}, //required dodati manualno ako je post req
+    body: {}, 
     requestCreatedAt: {
         type: Date,
         required: true
