@@ -40,10 +40,13 @@ const reqSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
+    isChecked: {
+        type : Boolean,
+        default : false,
+        require : true
+    },
     verified: {
         type: Boolean,
-        required: true,
-        default: false
     },
     verifiedResponseId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -63,6 +66,9 @@ const reqSchema = new mongoose.Schema({
     responseVerifiedAt: {
         type: Date,
         ref: 'ResponseDoc'
+    },
+    responseVerifiedByUser : {
+        type : String
     },
     relatedResponses: {
         type: Array

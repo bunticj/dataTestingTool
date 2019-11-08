@@ -57,6 +57,9 @@ const responseSchema = new mongoose.Schema({
         required : true,
         default : false
     },
+    isCheckedAt : {
+        type : Date
+    },
     comment : {
         type : String
     }
