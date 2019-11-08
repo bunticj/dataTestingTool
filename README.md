@@ -124,16 +124,17 @@ req.body:{
 *Keys which can be updated : 
 verified : Boolean,
 comment : String,
-tag : Array,
 description : String,
 label : String,
 title : String,
 url : String,
-headers: Object
+headers: Object,
+tag : Array
+
 Note:
 -changing req.query.params is possible through url 
 -using key 'tag' will remove former array and add a new one
--use key 'updateTag' to add a new string to existing array
+-using key 'updateTag' will add a new string to existing array
 
 ```
 
@@ -149,7 +150,8 @@ label : String,
 verified : Boolean,
 verifiedByUser : ObjectID,
 baseUrl : String,
-tag : String
+tag : String,
+isChecked : Boolean,
 sort : key name to be sorted with, 
 example -> sort=description,ascending , sort=-description ,  descending with "-" operator 
 
