@@ -40,8 +40,7 @@ const responseSchema = new mongoose.Schema({
        
     },
     verifiedByUser: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'UserDoc'
+        type: String,
     },
     verifiedByUserEmail : {
         type : String,

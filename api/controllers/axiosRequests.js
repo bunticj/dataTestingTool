@@ -11,12 +11,14 @@ module.exports.axiosRequest = (req, res, next) => {
             //find request by id and send it with axios
             if (result) {
                 var resultObj = {};
+                //check if user send new Auth token
                 if (req.body.Authorization) {
                     resultObj = result;
                     resultObj.headers.Authorization = req.body.Authorization;
                 } else {
                     resultObj = result;
                 }
+                //axios config and send request
                 axios.request({
                         method: resultObj.method,
                         url: resultObj.url,
@@ -43,6 +45,9 @@ module.exports.axiosRequest = (req, res, next) => {
                         //add responseId to request
                         result.relatedResponses.push(responseDoc._id);
                         result.save();
+
+
+                        
                         res.status(200).json({
                             message: "Response created",
                             responseDocument: responseDoc,

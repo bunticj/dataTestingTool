@@ -40,7 +40,7 @@ module.exports.postRequest = (req, res, next) => {
         path: url.parse(reqUrl).pathname,
         queryParams: reqQueryObj || 0,
         method: reqMethod,
-        body : reqBody || 0,
+        body: reqBody || 0,
         headers: reqHeaders,
         requestCreatedAt: new Date().toISOString(),
         title: reqTitle,
@@ -154,18 +154,19 @@ module.exports.updateRequest = (req, res, next) => {
     for (const ops of req.body) {
         updateOps[ops.propName] = ops.value;
 
-        if (ops.propName === 'verified' && ops.value == 'true') {
+        if (ops.propName === 'verified') {
             var verifByUser = req.userData._id
             var verifEmail = req.userData.email;
             var verifAt = new Date().toISOString();
-            console.log('Usao u if');
 
 
         }
-
+        if (ops.propName === 'updateTag'){
+             newTag = ops.value;
+            console.log(newTag);
+        }
 
     }
-    //update request document by id
     RequestDoc.findByIdAndUpdate({
             _id: reqId
         }, {
@@ -175,11 +176,15 @@ module.exports.updateRequest = (req, res, next) => {
         })
         .exec()
         .then(result => {
+            console.log(RequestDoc.tag);
+            console.log(result.tag);
+            result.tag.push(newTag);
             result.updatedAt.push(new Date().toISOString());
             result.verifiedByUser = verifByUser || null;
             result.requestVerifiedAt = verifAt || null;
             result.verifiedByUserEmail = verifEmail || null;
             // console.log(result);
+            result.save();
             res.status(200).json({
                 message: 'Request updated',
                 updatedRequest: result
@@ -195,8 +200,6 @@ module.exports.updateRequest = (req, res, next) => {
 }
 
 
-
-//delete single request and his responses
 module.exports.deleteRequest = (req, res, next) => {
 
     const reqId = req.params.requestId
@@ -206,7 +209,6 @@ module.exports.deleteRequest = (req, res, next) => {
         .exec()
         .then(result => {
 
-            //delete all responses with deleted requestId
             ResponseDoc.deleteMany({
                 requestId: reqId
             }, (err) => {
