@@ -80,7 +80,8 @@ module.exports.getRequest = (req, res, next) => {
         verified: req.query.verified,
         verifiedByUser: req.query.verifiedByUser,
         baseUrl: req.query.baseUrl,
-        tag: req.query.tag
+        tag: req.query.tag,
+        isChecked : req.query.isChecked
     };
 
     //add filters to query object
@@ -155,10 +156,10 @@ module.exports.updateRequest = (req, res, next) => {
         updateOps[ops.propName] = ops.value;
 
         if (ops.propName === 'verified') {
-            var verifByUser = req.userData._id
-            var verifEmail = req.userData.email;
-            var verifAt = new Date().toISOString();
-
+            const verifByUser = req.userData._id
+            const verifEmail = req.userData.email;
+            const verifAt = new Date().toISOString();
+            const isChecked = true;
 
         }
         if (ops.propName === 'updateTag'){
@@ -183,6 +184,7 @@ module.exports.updateRequest = (req, res, next) => {
             result.verifiedByUser = verifByUser || null;
             result.requestVerifiedAt = verifAt || null;
             result.verifiedByUserEmail = verifEmail || null;
+            result.isChecked = isChecked || null;
             // console.log(result);
             result.save();
             res.status(200).json({

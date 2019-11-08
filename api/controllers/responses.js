@@ -117,7 +117,7 @@ module.exports.updateResponse = (req, res, next) => {
             var verifEmail = req.userData.email;
             var verifAt = new Date().toISOString();
             var isChecked = true;
-
+            
         }
 
     }
@@ -130,10 +130,8 @@ module.exports.updateResponse = (req, res, next) => {
         })
         .exec()
         .then(result => {
-            console.log(result.verified);
 
             if (result.verified == true) {
-
                 //add verified responseId to request
                 RequestDoc.findById({
                     _id: result.requestId
@@ -142,16 +140,18 @@ module.exports.updateResponse = (req, res, next) => {
                         throw new Error('Not found');
                     }
                     doc.verifiedResponseId = result._id;
+                    doc.responseVerifiedAt = verifAt;
+                    doc.responseVerifiedByUser = verifEmail;
                     doc.save();
 
                 })
             }
-
             result.updatedAt.push(new Date().toISOString());
             result.verifiedByUser = verifByUser || null;
             result.responseVerifiedAt = verifAt || null;
             result.verifiedByUserEmail = verifEmail || null;
             result.isChecked = isChecked || null;
+            result.save();
             res.status(200).json({
                 message: 'Response updated',
                 updatedRequest: result

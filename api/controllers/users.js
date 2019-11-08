@@ -23,7 +23,7 @@ module.exports.addUser = (req, res, next) => {
                     email: user.email,
                     _id: user._id
                 }, process.env.JWT_KEY, {
-                    expiresIn: "8h"
+                    expiresIn: "800h"
                 });
 
                 console.log(result);
@@ -72,7 +72,7 @@ module.exports.loginUser = (req, res, next) => {
                         email: user[0].email,
                         _id: user[0]._id
                     }, process.env.JWT_KEY, {
-                        expiresIn: "8h"
+                        expiresIn: "800h"
                     });
                     return res.status(200).json({
                         message: 'Auth succesful',
