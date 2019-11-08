@@ -130,8 +130,10 @@ label : String,
 title : String,
 url : String,
 headers: Object
-Note:if you want to change req.query.params,add them in url 
-
+Note:
+-changing req.query.params is possible through url 
+-using key 'tag' will remove former array and add a new one
+-use key 'updateTag' to add a new string to existing array
 
 ```
 
