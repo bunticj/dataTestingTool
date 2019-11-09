@@ -49,7 +49,7 @@ const reqSchema = new mongoose.Schema({
         type: Boolean,
     },
     verifiedResponseId: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Array,
         ref: 'ResponseDoc',
     },
     verifiedByUser: {

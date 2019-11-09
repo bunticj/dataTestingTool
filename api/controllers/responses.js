@@ -16,7 +16,6 @@ module.exports.getAllResponses = (req, res, next) => {
     for (let key in filters) {
         if (filters[key]) {
             query[key] = filters[key];
-            console.log(key, '-key,  value : ', query[key]);
         }
     }
     //pagination
@@ -52,9 +51,9 @@ module.exports.getSingleResponse = (req, res, next) => {
 
                 res.status(200).json({
                     response: result,
-                    allResponses: {
+                    allResponsesByRequestId: {
                         type: 'GET',
-                        url: `${req.headers.host}/responses`
+                        url: `${req.headers.host}/requests/${result.requestId}/responses`
                     }
                 })
             } else {
@@ -139,7 +138,7 @@ module.exports.updateResponse = (req, res, next) => {
                     if (err) {
                         throw new Error('Not found');
                     }
-                    doc.verifiedResponseId = result._id;
+                    doc.verifiedResponseId.push(result._id);
                     doc.responseVerifiedAt = verifAt;
                     doc.responseVerifiedByUser = verifEmail;
                     doc.save();
