@@ -85,6 +85,7 @@ DELETE baseURL/users/:userId
 
 ```
 Add new request :
+
 POST baseURL/requests
 req.body :{
   //required fields : 
@@ -107,6 +108,7 @@ req.body :{
 
 ```
 Send saved request and get a response :
+
 POST baseURL/sendrequest
 req.body: {
   requestId : "requestId"
@@ -210,4 +212,16 @@ responseStatus : Number
 ```
 Delete response :
 DELETE baseURL/responses/:responseId
+```
+
+##### Response checker routes
+
+```
+Delete response :
+POST baseURL/checkresponses
+req.body : {
+  "id" : ["firstResponseIdTocheck","secondResponseId"],
+  *optional field:
+  "dataKey" : "String to represent path in responseData. Default path for all responses is 'responseData' key in response
+}
 ```

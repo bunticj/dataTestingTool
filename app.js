@@ -11,6 +11,7 @@ const userRoutes = require('./api/routes/users');
 const reqRoutes = require('./api/routes/requests');
 const respRoutes = require('./api/routes/responses');
 const axiosRoutes = require('./api/routes/axiosRequests'); 
+const checkRespRoutes = require('./api/routes/checkResponses');
 
 mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PW}@cluster0-kejbb.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
@@ -31,6 +32,7 @@ app.use('/', userRoutes);
 app.use('/requests', reqRoutes);
 app.use('/responses',respRoutes);
 app.use('/sendrequest',axiosRoutes);
+app.use('/checkresponse',checkRespRoutes)
 
 app.use((req, res, next) => {
     const error = new Error('Not found');
