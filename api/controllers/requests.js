@@ -81,14 +81,13 @@ module.exports.getRequest = (req, res, next) => {
         verifiedByUser: req.query.verifiedByUser,
         baseUrl: req.query.baseUrl,
         tag: req.query.tag,
-        isChecked : req.query.isChecked
+        isChecked: req.query.isChecked
     };
 
     //add filters to query object
     for (let key in filters) {
         if (filters[key]) {
             query[key] = filters[key];
-            console.log(key, '-key,  value : ', query[key]);
         }
     }
     //options and default values for pagination
@@ -100,7 +99,6 @@ module.exports.getRequest = (req, res, next) => {
     };
     RequestDoc.paginate(query, options)
         .then(result => {
-            // console.log(result);
             res.status(200).json(result);
         })
         .catch(err => {
@@ -120,7 +118,6 @@ module.exports.getSingleRequest = (req, res, next) => {
         .exec()
         .then(result => {
             if (result) {
-                console.log(result);
                 res.status(200).json({
                     request: result,
                     allRequests: {
@@ -135,7 +132,6 @@ module.exports.getSingleRequest = (req, res, next) => {
             }
         })
         .catch(err => {
-            console.log(err);
             res.status(500).json({
                 error: err
             });
@@ -156,14 +152,14 @@ module.exports.updateRequest = (req, res, next) => {
         updateOps[ops.propName] = ops.value;
 
         if (ops.propName === 'verified') {
-            const verifByUser = req.userData._id
-            const verifEmail = req.userData.email;
-            const verifAt = new Date().toISOString();
-            const isChecked = true;
+            var verifByUser = req.userData._id
+            var verifEmail = req.userData.email;
+            var verifAt = new Date().toISOString();
+            var isChecked = true;
 
         }
-        if (ops.propName === 'updateTag'){
-             newTag = ops.value;
+        if (ops.propName === 'updateTag') {
+           var newTag = ops.value;
             console.log(newTag);
         }
 
@@ -177,15 +173,14 @@ module.exports.updateRequest = (req, res, next) => {
         })
         .exec()
         .then(result => {
-            console.log(RequestDoc.tag);
-            console.log(result.tag);
-            result.tag.push(newTag);
+            if (newTag) {
+                result.tag.push(newTag)
+            }
             result.updatedAt.push(new Date().toISOString());
             result.verifiedByUser = verifByUser || null;
             result.requestVerifiedAt = verifAt || null;
             result.verifiedByUserEmail = verifEmail || null;
             result.isChecked = isChecked || null;
-            // console.log(result);
             result.save();
             res.status(200).json({
                 message: 'Request updated',
