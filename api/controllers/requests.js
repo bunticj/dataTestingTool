@@ -18,12 +18,10 @@ module.exports.postRequest = (req, res, next) => {
     //check queries in url ,and handle if there is one,none or many
     if (reqQueryString) {
         var reqQueryObj = {};
-
         if (reqQueryString.indexOf('&') > -1) {
             let splittedQuery = reqQueryString.split('&');
             splittedQuery.forEach(element => {
                 let splittedElem = element.split('=');
-                console.log(splittedElem, 'splitted in array ')
                 reqQueryObj[splittedElem[0]] = splittedElem[1];
             });
         } else {
@@ -32,7 +30,6 @@ module.exports.postRequest = (req, res, next) => {
         }
     }
     //save request in db                 
-    console.log(req.userData, 'userdataaaaaa');
     const requestDoc = new RequestDoc({
         _id: new mongoose.Types.ObjectId(),
         url: reqUrl,
@@ -60,7 +57,6 @@ module.exports.postRequest = (req, res, next) => {
             })
         })
         .catch(err => {
-            console.log(err);
             res.status(500).json({
                 error: err
             });
@@ -102,7 +98,6 @@ module.exports.getRequest = (req, res, next) => {
             res.status(200).json(result);
         })
         .catch(err => {
-            console.log(err);
             res.status(500).json({
                 error: err
             });
@@ -139,13 +134,10 @@ module.exports.getSingleRequest = (req, res, next) => {
 
 };
 
-
 //update request
-
 module.exports.updateRequest = (req, res, next) => {
 
     const reqId = req.params.requestId;
-
     //check which values user wants to send
     const updateOps = {};
     for (const ops of req.body) {
@@ -156,13 +148,10 @@ module.exports.updateRequest = (req, res, next) => {
             var verifEmail = req.userData.email;
             var verifAt = new Date().toISOString();
             var isChecked = true;
-
         }
         if (ops.propName === 'updateTag') {
            var newTag = ops.value;
-            console.log(newTag);
         }
-
     }
     RequestDoc.findByIdAndUpdate({
             _id: reqId
@@ -189,7 +178,6 @@ module.exports.updateRequest = (req, res, next) => {
 
         })
         .catch(err => {
-            console.log(err);
             res.status(500).json({
                 error: err
             });
@@ -205,7 +193,6 @@ module.exports.deleteRequest = (req, res, next) => {
         })
         .exec()
         .then(result => {
-
             ResponseDoc.deleteMany({
                 requestId: reqId
             }, (err) => {
@@ -218,7 +205,6 @@ module.exports.deleteRequest = (req, res, next) => {
             });
         })
         .catch(err => {
-            console.log(err);
             res.status(500).json({
                 error: err
             });

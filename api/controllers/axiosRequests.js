@@ -8,7 +8,6 @@ module.exports.axiosRequest = (req, res, next) => {
     const requestId = req.body.requestId;
     RequestDoc.findById(requestId)
         .then(result => {
-            //find request by id and send it with axios
             if (result) {
                 var resultObj = {};
                 //check if user send new Auth token
@@ -55,20 +54,17 @@ module.exports.axiosRequest = (req, res, next) => {
                         });
                     })
                     .catch(err => {
-                        console.log(err);
                         res.status(500).json({
                             error: err
                         });
                     });
             } else {
-                console.log('Request ID not found');
                 res.status(404).json({
                     message: "Not found"
                 })
             }
 
         }).catch(err => {
-            console.log(err);
             res.status(500).json({
                 error: err
             });

@@ -8,25 +8,20 @@ const jwt = require('jsonwebtoken');
 module.exports.addUser = (req, res, next) => {
     //hash password
     bcrypt.hash(req.body.password, 10, (err, hash) => {
-
         const user = new UserDoc({
             _id: new mongoose.Types.ObjectId(),
             email: req.body.email,
             password: hash,
             created_at: new Date().toISOString()
-
         });
         user.save()
             .then(result => {
-
                 const token = jwt.sign({
                     email: user.email,
                     _id: user._id
                 }, process.env.JWT_KEY, {
                     expiresIn: "800h"
                 });
-
-                console.log(result);
                 res.status(201).json({
                     message: 'User created',
                     createdUser: user,
@@ -39,7 +34,6 @@ module.exports.addUser = (req, res, next) => {
                 });
             })
             .catch(err => {
-                console.log(err);
                 res.status(500).json({
                     error: err
                 });
@@ -62,11 +56,8 @@ module.exports.loginUser = (req, res, next) => {
                     message: 'Auth failed'
                 });
             }
-            console.log(user);
-
             //check plain pass with hashed in DB
             bcrypt.compare(req.body.password, user[0].password).then(result => {
-
                 if (result) {
                     const token = jwt.sign({
                         email: user[0].email,
@@ -89,16 +80,11 @@ module.exports.loginUser = (req, res, next) => {
             });
         })
         .catch(err => {
-            console.log(err);
             res.status(500).json({
                 error: err
             });
         });
 }
-
-
-
-
 
 //get all users
 module.exports.getAllUsers = (req, res, next) => {
@@ -119,11 +105,9 @@ module.exports.getAllUsers = (req, res, next) => {
                     }
                 })
             };
-            console.log(req.headers.host);
             res.status(200).json(response);
         })
         .catch(err => {
-            console.log(err);
             res.status(500).json({
                 error: err
             });
@@ -135,10 +119,8 @@ module.exports.getUserById = (req, res, next) => {
     const id = req.params.userId;
     UserDoc.findById(id)
         .select('-password')
-
         .exec()
         .then(result => {
-            console.log(result);
             if (result) {
                 res.status(200).json({
                     user: result,
@@ -155,7 +137,6 @@ module.exports.getUserById = (req, res, next) => {
             }
         })
         .catch(err => {
-            console.log(err);
             res.status(500).json({
                 error: err
             });
@@ -177,7 +158,6 @@ module.exports.deleteUser = (req, res, next) => {
                 });
             })
             .catch(err => {
-                console.log(err);
                 res.status(500).json({
                     error: err
                 });
@@ -194,9 +174,7 @@ module.exports.deleteUser = (req, res, next) => {
 //In postman : [{"propName":"nameOfkeyToUpdate","value":"valueOfkey" }]
 module.exports.updateUser = (req, res, next) => {
     const id = req.params.userId;
-
     if (id === req.userData._id) {
-
         const updateOps = {};
         for (const ops of req.body) {
             updateOps[ops.propName] = ops.value;
@@ -209,19 +187,16 @@ module.exports.updateUser = (req, res, next) => {
             })
             .exec()
             .then(result => {
-                console.log(result);
                 res.status(200).json({
                     message: 'User updated',
                     request: {
                         type: 'GET',
                         description: 'Get user',
                         url: `${req.headers.host}/users/${id}`
-
                     }
                 });
             })
             .catch(err => {
-                console.log(err);
                 res.status(500).json({
                     error: err
                 });

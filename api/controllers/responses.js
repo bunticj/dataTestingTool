@@ -27,17 +27,13 @@ module.exports.getAllResponses = (req, res, next) => {
     };
     ResponseDoc.paginate(query, options)
         .then(result => {
-            // console.log(result);
             res.status(200).json(result);
         })
         .catch(err => {
-            console.log(err);
             res.status(500).json({
                 error: err
             });
         });
-
-
 };
 
 //get single response by id
@@ -47,8 +43,6 @@ module.exports.getSingleResponse = (req, res, next) => {
         .exec()
         .then(result => {
             if (result) {
-
-
                 res.status(200).json({
                     response: result,
                     allResponsesByRequestId: {
@@ -64,16 +58,14 @@ module.exports.getSingleResponse = (req, res, next) => {
         })
         .catch(err => {
             if (err) {
-                res.status()
+                res.status(500).json(err);
             }
         })
 }
 
-
 //get all responses from the same request
 module.exports.getConnectedResponses = (req, res, next) => {
     const reqId = req.params.requestId;
-
     ResponseDoc.find({
         requestId: reqId
     }, (err, result) => {
@@ -82,14 +74,11 @@ module.exports.getConnectedResponses = (req, res, next) => {
                 message: 'Not found'
             });
         }
-        console.log(result);
-
         res.status(200).json({
             totalRecordCount: result.length,
             responses: result.map(doc => {
                 return {
                     response: doc,
-
                 }
             }),
             getRequest: {
@@ -98,8 +87,6 @@ module.exports.getConnectedResponses = (req, res, next) => {
             }
         });
     });
-
-
 }
 
 
@@ -107,18 +94,14 @@ module.exports.getConnectedResponses = (req, res, next) => {
 module.exports.updateResponse = (req, res, next) => {
     const id = req.params.responseId;
     const updateOps = {};
-
     for (const ops of req.body) {
         updateOps[ops.propName] = ops.value;
-
         if (ops.propName === 'verified') {
             var verifByUser = req.userData._id
             var verifEmail = req.userData.email;
             var verifAt = new Date().toISOString();
             var isChecked = true;
-            
         }
-
     }
     ResponseDoc.findByIdAndUpdate({
             _id: id
@@ -129,7 +112,6 @@ module.exports.updateResponse = (req, res, next) => {
         })
         .exec()
         .then(result => {
-
             if (result.verified == true) {
                 //add verified responseId to request
                 RequestDoc.findById({
@@ -142,7 +124,6 @@ module.exports.updateResponse = (req, res, next) => {
                     doc.responseVerifiedAt = verifAt;
                     doc.responseVerifiedByUser = verifEmail;
                     doc.save();
-
                 })
             }
             result.updatedAt.push(new Date().toISOString());
@@ -157,7 +138,6 @@ module.exports.updateResponse = (req, res, next) => {
             });
         })
         .catch(err => {
-            console.log(err);
             res.status(500).json({
                 error: err
             });
@@ -177,12 +157,9 @@ module.exports.deleteResponse = (req, res, next) => {
             });
         })
         .catch(err => {
-            console.log(err);
             res.status(500).json({
                 error: err
             });
         });
-
-
 
 }

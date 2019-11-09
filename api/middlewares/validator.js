@@ -12,9 +12,7 @@ module.exports.reqValidationRules = () => {
         .not().isEmpty().withMessage('Field is empty'),
 
         body('method')
-        .not().isEmpty().withMessage('Field is empty')
-        
-        
+        .not().isEmpty().withMessage('Field is empty')               
     ]
 };
 // user register validation
