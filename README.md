@@ -217,7 +217,7 @@ DELETE baseURL/responses/:responseId
 ##### Response checker routes
 
 ```
-Delete response :
+Check if two responses are equal by data :
 POST baseURL/checkresponses
 req.body : {
   "id" : ["firstResponseIdTocheck","secondResponseId"],
