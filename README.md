@@ -218,7 +218,7 @@ DELETE baseURL/responses/:responseId
 
 ```
 Check if two responses are equal by data :
-POST baseURL/checkresponses
+POST baseURL/checkresponse
 req.body : {
   "id" : ["firstResponseIdTocheck","secondResponseId"],
   *optional field:
