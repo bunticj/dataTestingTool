@@ -8,7 +8,7 @@ const authCheck = require('../middlewares/auth');
 const UserController = require('../controllers/users');
 
 
-router.get('/',(req,res,next)=> res.status(200).send('Log in or register to proceed'));
+router.get('/',(req,res,next) => res.status(200).send('Log in or register to proceed'));
 //register user
 router.post('/register', userValidationRules(), validate, UserController.addUser);
 router.get('/register', (req,res,next)=> res.status(200).send('Register'));
