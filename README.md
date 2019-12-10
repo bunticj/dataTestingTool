@@ -14,6 +14,7 @@ add env variables in .env file in root folder:
 MONGO_USER=MongoDBUserName
 MONGO_PW=MongoDBPassword
 MONGO_DB=MongoDatabaseName
+MONGO_CLUSTER=MongoClusterPath
 JWT_KEY=yourSecretStringKey
 ```
 
@@ -171,6 +172,14 @@ GET baseURL/requests/:requestId/responses
 ```
 Delete request and all his responses :
 DELETE baseURL/requests/:requestId
+```
+```
+Get list of labels :
+GET baseURL/labels
+```
+```
+Get list of tags :
+GET baseURL/tags
 ```
 
 ##### Response related routes
