@@ -72,7 +72,8 @@ GET baseURL/users/:userId
 Update user id :
 PATCH baseURL/users/:userId
 req.body: {
-[{"propName" : "name of key to update", "value" : "value to be updated},{"propName" : "name of other key to update", "value" : "value to be updated}]
+[{"propName" : "name of key to update", "value" : "value to be updated},
+{"propName" : "name of other key to update", "value" : "value to be updated}]
 }
 ```
 
@@ -121,7 +122,8 @@ req.body: {
 Update request :
 PATCH baseURL/requests/:requestId
 req.body:{
-[{"propName" : "name of key to update", "value" : "value to be updated},{"propName" : "name of other key to update", "value" : "value to be updated}]
+[{"propName" : "name of key to update", "value" : "value to be updated},
+{"propName" : "name of other key to update", "value" : "value to be updated}]
 }
 *Keys which can be updated : 
 verified : Boolean,
@@ -154,8 +156,9 @@ verifiedByUser : ObjectID,
 baseUrl : String,
 tag : String,
 isChecked : Boolean,
-sort : key name to be sorted with, 
-example -> sort=description,ascending , sort=-description ,  descending with "-" operator 
+sort : key name to be sorted with, example:
+sort=description, ascending  
+sort=-description, descending with "-" operator 
 
 ```
 
@@ -172,6 +175,14 @@ GET baseURL/requests/:requestId/responses
 Delete request and all his responses :
 DELETE baseURL/requests/:requestId
 ```
+```
+Get list of labels :
+GET baseURL/labels
+```
+```
+Get list of tags :
+GET baseURL/tags
+```
 
 ##### Response related routes
 
@@ -179,16 +190,16 @@ DELETE baseURL/requests/:requestId
 Get all responses :
 GET baseURL/responses
 
-query params for pagination and filters
-
+query params for pagination and filters:
 page : Number,
 limit : Number,
 isChecked : Boolean,
 verified : Boolean,
 verifiedByUser : ObjectID,
 comment : String
-sort : key name to be sorted with, 
-example -> sort=description,ascending , sort=-description ,  descending with "-" operator 
+sort : key name to be sorted with, example:
+sort=description, ascending,
+sort=-description, descending with "-" operator 
 ```
 
 ```
@@ -200,7 +211,8 @@ GET baseURL/responses/:responseId
 Update response :
 PATCH baseURL/responses/:responseId
 req.body : {
-[{"propName" : "name of key to update", "value" : "value to be updated},{"propName" : "name of other key to update", "value" : "value to be updated}]
+[{"propName" : "name of key to update", "value" : "value to be updated},
+{"propName" : "name of other key to update", "value" : "value to be updated}]
 }
 *Keys which can be updated : 
 verified : Boolean,
