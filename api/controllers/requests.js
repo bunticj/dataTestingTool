@@ -1,5 +1,8 @@
 const RequestDoc = require('../models/requests');
 const ResponseDoc = require('../models/responses');
+const TagDoc = require('../models/tag-label').tag;
+const LabelDoc = require('../models/tag-label').lab;
+
 const mongoose = require('mongoose');
 const url = require('url');
 
@@ -47,9 +50,59 @@ module.exports.postRequest = (req, res, next) => {
         creatorEmail: req.userData.email,
         tag: reqTag
     });
+
+    //label collection 
+    if (reqLabel) {
+        LabelDoc.find({
+            label: reqLabel
+        }, (err, doc) => {
+            if (doc.length === 0) {
+                const labelDoc = new LabelDoc({
+                    label: reqLabel,
+                    created_at: new Date().toISOString()
+                });
+                labelDoc.save(error => {
+                    if (error) {
+                        throw error;
+                    }
+                    console.log('spasen label');
+                });
+            } else {
+                console.log('samo logiram');
+            }
+        });
+    }
+
+    if (reqTag) {
+        reqTag.forEach(tag => {
+            TagDoc.find({
+                tag: tag
+            }, (err, doc) => {
+                if (doc.length === 0) {
+                    const tagDoc = new TagDoc({
+                        tag: tag,
+                        created_at: new Date().toISOString()
+                    });
+                    tagDoc.save(error => {
+                        if (error) {
+                            throw error;
+                        }
+                        console.log('spasen tag');
+
+                    });
+                }else {
+                    console.log('logiram tag');
+                }
+            })
+
+
+        });
+
+
+    }
     requestDoc.save()
         .then(result => {
-            console.log(result);
+            // console.log(result);
             res.status(201).json({
                 message: 'Request created',
                 createdRequest: result
@@ -150,7 +203,7 @@ module.exports.updateRequest = (req, res, next) => {
             var isChecked = true;
         }
         if (ops.propName === 'updateTag') {
-           var newTag = ops.value;
+            var newTag = ops.value;
         }
     }
     RequestDoc.findByIdAndUpdate({
