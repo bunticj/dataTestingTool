@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const labelSchema = mongoose.Schema({
     label: {
         type: String,
-        
+
     },
     created_at: {
         type: Date,
