@@ -14,6 +14,7 @@ add env variables in .env file in root folder:
 MONGO_USER=MongoDBUserName
 MONGO_PW=MongoDBPassword
 MONGO_DB=MongoDatabaseName
+MONGO_CLUSTER=MongoClusterPath
 JWT_KEY=yourSecretStringKey
 ```
 
@@ -113,6 +114,7 @@ Send saved request and get a response :
 POST baseURL/sendrequest
 req.body: {
   requestId : "requestId"
+
   *optional field in case you want to change the value of Authorization header :
   Authorization : "Bearer tokenValue"
 }
@@ -234,6 +236,6 @@ POST baseURL/checkresponse
 req.body : {
   "id" : ["firstResponseIdTocheck","secondResponseId"],
   *optional field:
-  "dataKey" : "String to represent path in responseData. Default path for all responses is 'responseData' key in response
+  "dataKey" : "String to represent path to responseData, in case there is metadata you want to avoid comparing. Default path for all responses is 'responseData' key in response
 }
 ```

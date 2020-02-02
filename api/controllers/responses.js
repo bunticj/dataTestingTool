@@ -45,10 +45,7 @@ module.exports.getSingleResponse = (req, res, next) => {
             if (result) {
                 res.status(200).json({
                     response: result,
-                    allResponsesByRequestId: {
-                        type: 'GET',
-                        url: `${req.headers.host}/requests/${result.requestId}/responses`
-                    }
+                    
                 })
             } else {
                 res.status(404).json({
@@ -113,7 +110,7 @@ module.exports.updateResponse = (req, res, next) => {
         .exec()
         .then(result => {
             if (result.verified == true) {
-                //add verified responseId to request
+                //add verified responseId to request collection
                 RequestDoc.findById({
                     _id: result.requestId
                 }, (err, doc) => {

@@ -18,6 +18,7 @@ module.exports.postRequest = (req, res, next) => {
     const reqTag = req.body.tag;
     const reqQueryString = url.parse(reqUrl).query;
     const reqBody = req.body.body;
+
     //check queries in url ,and handle if there is one,none or many
     if (reqQueryString) {
         var reqQueryObj = {};
@@ -61,18 +62,16 @@ module.exports.postRequest = (req, res, next) => {
                     label: reqLabel,
                     created_at: new Date().toISOString()
                 });
+                //save label in DB
                 labelDoc.save(error => {
                     if (error) {
                         throw error;
                     }
-                    console.log('spasen label');
                 });
-            } else {
-                console.log('samo logiram');
             }
         });
     }
-
+    //tag collection
     if (reqTag) {
         reqTag.forEach(tag => {
             TagDoc.find({
@@ -87,19 +86,13 @@ module.exports.postRequest = (req, res, next) => {
                         if (error) {
                             throw error;
                         }
-                        console.log('spasen tag');
 
                     });
-                }else {
-                    console.log('logiram tag');
                 }
             })
-
-
         });
-
-
     }
+    //save request to DB
     requestDoc.save()
         .then(result => {
             // console.log(result);
@@ -123,7 +116,6 @@ module.exports.postRequest = (req, res, next) => {
 module.exports.getRequest = (req, res, next) => {
 
     const query = {};
-    //available filters
     const filters = {
         label: req.query.label,
         verified: req.query.verified,
@@ -133,7 +125,7 @@ module.exports.getRequest = (req, res, next) => {
         isChecked: req.query.isChecked
     };
 
-    //add filters to query object
+    //add filters to query params object
     for (let key in filters) {
         if (filters[key]) {
             query[key] = filters[key];
@@ -146,6 +138,8 @@ module.exports.getRequest = (req, res, next) => {
         sort: req.query.sort || null
 
     };
+
+
     RequestDoc.paginate(query, options)
         .then(result => {
             res.status(200).json(result);
@@ -191,7 +185,7 @@ module.exports.getSingleRequest = (req, res, next) => {
 module.exports.updateRequest = (req, res, next) => {
 
     const reqId = req.params.requestId;
-    //check which values user wants to send
+    //check which values user wants to update
     const updateOps = {};
     for (const ops of req.body) {
         updateOps[ops.propName] = ops.value;
@@ -202,6 +196,7 @@ module.exports.updateRequest = (req, res, next) => {
             var verifAt = new Date().toISOString();
             var isChecked = true;
         }
+        
         if (ops.propName === 'updateTag') {
             var newTag = ops.value;
         }
@@ -215,6 +210,7 @@ module.exports.updateRequest = (req, res, next) => {
         })
         .exec()
         .then(result => {
+            
             if (newTag) {
                 result.tag.push(newTag)
             }
@@ -237,7 +233,7 @@ module.exports.updateRequest = (req, res, next) => {
         });
 }
 
-
+//delete request and responses
 module.exports.deleteRequest = (req, res, next) => {
 
     const reqId = req.params.requestId

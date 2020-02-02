@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 
-//add new user and retrieve toke
+//add new user and retrieve token
 module.exports.addUser = (req, res, next) => {
     //hash password
     bcrypt.hash(req.body.password, 10, (err, hash) => {
@@ -14,6 +14,7 @@ module.exports.addUser = (req, res, next) => {
             password: hash,
             created_at: new Date().toISOString()
         });
+        //save user to DB and give him a token
         user.save()
             .then(result => {
                 const token = jwt.sign({
@@ -26,11 +27,7 @@ module.exports.addUser = (req, res, next) => {
                     message: 'User created',
                     createdUser: user,
                     token: token,
-                    request: {
-                        type: 'GET',
-                        description: 'Get single user',
-                        url: `${req.headers.host}/users/${result.id}`
-                    }
+
                 });
             })
             .catch(err => {
@@ -46,17 +43,19 @@ module.exports.addUser = (req, res, next) => {
 
 //login user and retrieve token
 module.exports.loginUser = (req, res, next) => {
+
     UserDoc.find({
             email: req.body.email
         })
         .exec()
         .then(user => {
+            //user exist in DB
             if (user.length < 1) {
                 return res.status(401).json({
                     message: 'Auth failed'
                 });
             }
-            //check plain pass with hashed in DB
+            //compare plain pass with hashed in DB
             bcrypt.compare(req.body.password, user[0].password).then(result => {
                 if (result) {
                     const token = jwt.sign({
@@ -68,10 +67,7 @@ module.exports.loginUser = (req, res, next) => {
                     return res.status(200).json({
                         message: 'Auth succesful',
                         token: token,
-                        request: {
-                            type: 'GET',
-                            url: `${req.headers.host}/users/${user[0]._id}`
-                        }
+
                     });
                 }
                 return res.status(401).json({
@@ -88,8 +84,8 @@ module.exports.loginUser = (req, res, next) => {
 
 //get all users
 module.exports.getAllUsers = (req, res, next) => {
-    //don't show password
     UserDoc.find()
+        //don't show password
         .select('-password')
         .exec()
         .then(result => {
@@ -98,10 +94,7 @@ module.exports.getAllUsers = (req, res, next) => {
                 users: result.map(doc => {
                     return {
                         user: doc,
-                        request: {
-                            type: 'GET',
-                            url: `${req.headers.host}/users/${doc._id}`
-                        }
+
                     }
                 })
             };
@@ -171,11 +164,14 @@ module.exports.deleteUser = (req, res, next) => {
 
 };
 
-//In postman : [{"propName":"nameOfkeyToUpdate","value":"valueOfkey" }]
+
 module.exports.updateUser = (req, res, next) => {
     const id = req.params.userId;
+
     if (id === req.userData._id) {
         const updateOps = {};
+
+        //In postman : [{"propName":"nameOfkeyToUpdate","value":"valueOfkey" }]
         for (const ops of req.body) {
             updateOps[ops.propName] = ops.value;
         }
@@ -189,11 +185,7 @@ module.exports.updateUser = (req, res, next) => {
             .then(result => {
                 res.status(200).json({
                     message: 'User updated',
-                    request: {
-                        type: 'GET',
-                        description: 'Get user',
-                        url: `${req.headers.host}/users/${id}`
-                    }
+
                 });
             })
             .catch(err => {
@@ -202,7 +194,7 @@ module.exports.updateUser = (req, res, next) => {
                 });
             });
 
-
+        //user can only update himself
     } else {
         res.status(401).json({
             message: "Unauthorized!"
